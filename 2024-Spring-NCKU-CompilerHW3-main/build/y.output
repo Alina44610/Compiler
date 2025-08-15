@@ -1,0 +1,4223 @@
+未在文法中使用終結語詞
+
+    BXO_ASSIGN
+    THEN
+
+
+狀態 45 衝突：1 項縮減/縮減
+狀態 199 衝突：1 項偏移/縮減
+狀態 233 衝突：1 項偏移/縮減
+
+
+文法
+
+    0 $accept: Program $end
+
+    1 $@1: ε
+
+    2 Program: $@1 GlobalStmtList
+    3        | ε
+
+    4 GlobalStmtList: GlobalStmtList GlobalStmt
+    5               | GlobalStmt
+
+    6 GlobalStmt: DefineVariableStmt
+    7           | FunctionDefStmt
+
+    8 DefineVariableStmt: VARIABLE_T IDENT VAL_ASSIGN ExprRightSide ';'
+
+    9 $@2: ε
+
+   10 $@3: ε
+
+   11 $@4: ε
+
+   12 FunctionDefStmt: VARIABLE_T IDENT $@2 '(' $@3 FunctionParameterStmtList ')' $@4 '{' StmtList '}'
+
+   13 FunctionParameterStmtList: FunctionParameterStmtList ',' FunctionParameterStmt
+   14                          | FunctionParameterStmt
+   15                          | ε
+
+   16 FunctionParameterStmt: VARIABLE_T IDENT
+   17                      | VARIABLE_T IDENT '[' ']'
+   18                      | ExprPlus
+
+   19 StmtList: StmtList Stmt
+   20         | Stmt
+
+   21 Stmt: ';'
+   22     | RegularDefineStmt ';'
+   23     | COUT CoutParmListStmt ';'
+
+   24 $@5: ε
+
+   25 $@6: ε
+
+   26 Stmt: IF '(' Expr ')' $@5 IfElseStmt $@6 Elsestmt
+
+   27 $@7: ε
+
+   28 $@8: ε
+
+   29 $@9: ε
+
+   30 Stmt: WHILE $@7 '(' Expr $@8 ')' $@9 '{' StmtList '}'
+
+   31 $@10: ε
+
+   32 Stmt: FOR $@10 '(' ForStmt ')' '{' StmtList '}'
+   33     | BREAK ';'
+   34     | CONTINUE ';'
+   35     | RETURN ';'
+   36     | RETURN Expr ';'
+
+   37 Elsestmt: ELSE IfElseStmt
+   38         | ε
+
+   39 RegularDefineStmt: VARIABLE_T StmtParameter
+   40                  | VARIABLE_T IDENT ArrayDefStmt
+
+   41 $@11: ε
+
+   42 RegularDefineStmt: VARIABLE_T IDENT ArrayDefStmt $@11 VAL_ASSIGN ArrayExpression
+   43                  | Expr
+
+   44 $@12: ε
+
+   45 CoutParmListStmt: CoutParmListStmt $@12 SHL ExprPlus
+
+   46 $@13: ε
+
+   47 CoutParmListStmt: SHL $@13 ExprPlus
+
+   48 IfElseStmt: Stmt
+
+   49 $@14: ε
+
+   50 IfElseStmt: $@14 '{' StmtList '}'
+
+   51 $@15: ε
+
+   52 $@16: ε
+
+   53 ForStmt: ForInit $@15 ';' Expr ';' $@16 Expr
+   54        | RegularDefineStmt ':' Expr
+
+   55 ForInit: RegularDefineStmt
+   56        | ε
+
+   57 ArrayDefStmt: ArrayStmt '[' ArrayVariable ']'
+   58             | '[' ArrayVariable ']'
+
+   59 $@17: ε
+
+   60 ArrayStmt: ArrayStmt $@17 '[' ArrayVariable ']'
+   61          | '[' ArrayVariable ']'
+
+   62 ArrayVariable: IDENT
+   63              | INT_LIT
+
+   64 ArrayExpression: '{' ArrayInsideExpression '}'
+
+   65 $@18: ε
+
+   66 ArrayInsideExpression: ArrayInsideExpression ',' $@18 ExprPlus
+
+   67 $@19: ε
+
+   68 ArrayInsideExpression: $@19 ExprPlus
+   69                      | ε
+
+   70 StmtParameter: StmtParameter ',' StmtParameterList
+   71              | StmtParameterList
+
+   72 StmtParameterList: IDENT VAL_ASSIGN ExprRightSide
+   73                  | IDENT
+
+   74 Expr: ExprLeftSide VAL_ASSIGN Expr
+
+   75 $@20: ε
+
+   76 $@21: ε
+
+   77 Expr: ExprLeftSide $@20 ADD_ASSIGN Expr $@21
+
+   78 $@22: ε
+
+   79 $@23: ε
+
+   80 Expr: ExprLeftSide $@22 SUB_ASSIGN Expr $@23
+
+   81 $@24: ε
+
+   82 $@25: ε
+
+   83 Expr: ExprLeftSide $@24 MUL_ASSIGN Expr $@25
+
+   84 $@26: ε
+
+   85 $@27: ε
+
+   86 Expr: ExprLeftSide $@26 DIV_ASSIGN Expr $@27
+
+   87 $@28: ε
+
+   88 $@29: ε
+
+   89 Expr: ExprLeftSide $@28 REM_ASSIGN Expr $@29
+
+   90 $@30: ε
+
+   91 $@31: ε
+
+   92 Expr: ExprLeftSide $@30 BAN_ASSIGN Expr $@31
+
+   93 $@32: ε
+
+   94 $@33: ε
+
+   95 Expr: ExprLeftSide $@32 BOR_ASSIGN Expr $@33
+
+   96 $@34: ε
+
+   97 $@35: ε
+
+   98 Expr: ExprLeftSide $@34 SHR_ASSIGN Expr $@35
+
+   99 $@36: ε
+
+  100 $@37: ε
+
+  101 Expr: ExprLeftSide $@36 SHL_ASSIGN Expr $@37
+  102     | ExprRightSide
+
+  103 ExprLeftSide: IDENT
+
+  104 $@38: ε
+
+  105 ExprLeftSide: IDENT $@38 ArrayStmt
+  106             | '(' Expr ')'
+
+  107 ExprRightSide: ExprRightSide LOR ExprDoubleAnd
+  108              | ExprDoubleAnd
+
+  109 ExprDoubleAnd: ExprDoubleAnd LAN ExprOr
+  110              | ExprOr
+
+  111 ExprOr: ExprOr BOR ExprXor
+  112       | ExprXor
+
+  113 ExprXor: ExprXor BXO ExprAnd
+  114        | ExprAnd
+
+  115 ExprAnd: ExprAnd BAN ExprSame
+  116        | ExprSame
+
+  117 ExprSame: ExprSame EQL ExprBigOrSmall
+  118         | ExprSame NEQ ExprBigOrSmall
+  119         | ExprBigOrSmall
+
+  120 ExprBigOrSmall: ExprBigOrSmall GTR ExprBitwise
+  121               | ExprBigOrSmall GEQ ExprBitwise
+  122               | ExprBigOrSmall LEQ ExprBitwise
+  123               | ExprBigOrSmall LES ExprBitwise
+  124               | ExprBitwise
+
+  125 ExprBitwise: ExprBitwise SHR ExprPlus
+  126            | ExprBitwise SHL ExprPlus
+  127            | ExprPlus
+
+  128 ExprPlus: ExprPlus ADD ExprCross
+  129         | ExprPlus SUB ExprCross
+  130         | ExprCross
+
+  131 ExprCross: ExprCross MUL ExprFrontUnary
+  132          | ExprCross DIV ExprFrontUnary
+  133          | ExprCross REM ExprFrontUnary
+  134          | ExprFrontUnary
+
+  135 ExprFrontUnary: NOT ExprFrontUnary
+  136               | BNT ExprFrontUnary
+  137               | ADD ExprFrontUnary
+  138               | SUB ExprFrontUnary
+
+  139 $@39: ε
+
+  140 ExprFrontUnary: '(' VARIABLE_T ')' $@39 ExprPostfix
+  141               | ExprPostfix
+
+  142 ExprPostfix: ExprValue INC_ASSIGN
+  143            | ExprValue DEC_ASSIGN
+  144            | ExprValue
+
+  145 ExprValue: INT_LIT
+  146          | FLOAT_LIT
+  147          | BOOL_LIT
+  148          | CHAR_LIT
+  149          | STR_LIT
+  150          | IDENT '(' FunctionParameterStmtList ')'
+  151          | IDENT
+
+  152 $@40: ε
+
+  153 ExprValue: IDENT $@40 ArrayStmt
+  154          | '(' Expr ')'
+
+
+終結語詞，附有它們出現處的規則
+
+    $end (0) 0
+    '(' (40) 12 26 30 32 106 140 150 154
+    ')' (41) 12 26 30 32 106 140 150 154
+    ',' (44) 13 66 70
+    ':' (58) 54
+    ';' (59) 8 21 22 23 33 34 35 36 53
+    '[' (91) 17 57 58 60 61
+    ']' (93) 17 57 58 60 61
+    '{' (123) 12 30 32 50 64
+    '}' (125) 12 30 32 50 64
+    error (256)
+    COUT (258) 23
+    SHR (259) 125
+    SHL (260) 45 47 126
+    BAN (261) 115
+    BOR (262) 111
+    BNT (263) 136
+    BXO (264) 113
+    ADD (265) 128 137
+    SUB (266) 129 138
+    MUL (267) 131
+    DIV (268) 132
+    REM (269) 133
+    NOT (270) 135
+    GTR (271) 120
+    LES (272) 123
+    GEQ (273) 121
+    LEQ (274) 122
+    EQL (275) 117
+    NEQ (276) 118
+    LAN (277) 109
+    LOR (278) 107
+    VAL_ASSIGN (279) 8 42 72 74
+    ADD_ASSIGN (280) 77
+    SUB_ASSIGN (281) 80
+    MUL_ASSIGN (282) 83
+    DIV_ASSIGN (283) 86
+    REM_ASSIGN (284) 89
+    BAN_ASSIGN (285) 92
+    BOR_ASSIGN (286) 95
+    BXO_ASSIGN (287)
+    SHR_ASSIGN (288) 98
+    SHL_ASSIGN (289) 101
+    INC_ASSIGN (290) 142
+    DEC_ASSIGN (291) 143
+    IF (292) 26
+    ELSE (293) 37
+    FOR (294) 32
+    WHILE (295) 30
+    RETURN (296) 35 36
+    BREAK (297) 33
+    CONTINUE (298) 34
+    VARIABLE_T <var_type> (299) 8 12 16 17 39 40 42 140
+    BOOL_LIT <b_var> (300) 147
+    CHAR_LIT <c_var> (301) 148
+    INT_LIT <i_var> (302) 63 145
+    FLOAT_LIT <f_var> (303) 146
+    STR_LIT <s_var> (304) 149
+    IDENT <s_var> (305) 8 12 16 17 40 42 62 72 73 103 105 150 151 153
+    THEN (306)
+
+
+非終結語詞，附有它們出現處的規則
+
+    $accept (61)
+        於左側： 0
+    Program (62)
+        於左側： 2 3
+        於右側： 0
+    $@1 (63)
+        於左側： 1
+        於右側： 2
+    GlobalStmtList (64)
+        於左側： 4 5
+        於右側： 2 4
+    GlobalStmt (65)
+        於左側： 6 7
+        於右側： 4 5
+    DefineVariableStmt (66)
+        於左側： 8
+        於右側： 6
+    FunctionDefStmt (67)
+        於左側： 12
+        於右側： 7
+    $@2 (68)
+        於左側： 9
+        於右側： 12
+    $@3 (69)
+        於左側： 10
+        於右側： 12
+    $@4 (70)
+        於左側： 11
+        於右側： 12
+    FunctionParameterStmtList (71)
+        於左側： 13 14 15
+        於右側： 12 13 150
+    FunctionParameterStmt (72)
+        於左側： 16 17 18
+        於右側： 13 14
+    StmtList (73)
+        於左側： 19 20
+        於右側： 12 19 30 32 50
+    Stmt (74)
+        於左側： 21 22 23 26 30 32 33 34 35 36
+        於右側： 19 20 48
+    $@5 (75)
+        於左側： 24
+        於右側： 26
+    $@6 (76)
+        於左側： 25
+        於右側： 26
+    $@7 (77)
+        於左側： 27
+        於右側： 30
+    $@8 (78)
+        於左側： 28
+        於右側： 30
+    $@9 (79)
+        於左側： 29
+        於右側： 30
+    $@10 (80)
+        於左側： 31
+        於右側： 32
+    Elsestmt (81)
+        於左側： 37 38
+        於右側： 26
+    RegularDefineStmt (82)
+        於左側： 39 40 42 43
+        於右側： 22 54 55
+    $@11 (83)
+        於左側： 41
+        於右側： 42
+    CoutParmListStmt (84)
+        於左側： 45 47
+        於右側： 23 45
+    $@12 (85)
+        於左側： 44
+        於右側： 45
+    $@13 (86)
+        於左側： 46
+        於右側： 47
+    IfElseStmt (87)
+        於左側： 48 50
+        於右側： 26 37
+    $@14 (88)
+        於左側： 49
+        於右側： 50
+    ForStmt (89)
+        於左側： 53 54
+        於右側： 32
+    $@15 (90)
+        於左側： 51
+        於右側： 53
+    $@16 (91)
+        於左側： 52
+        於右側： 53
+    ForInit (92)
+        於左側： 55 56
+        於右側： 53
+    ArrayDefStmt (93)
+        於左側： 57 58
+        於右側： 40 42
+    ArrayStmt (94)
+        於左側： 60 61
+        於右側： 57 60 105 153
+    $@17 (95)
+        於左側： 59
+        於右側： 60
+    ArrayVariable (96)
+        於左側： 62 63
+        於右側： 57 58 60 61
+    ArrayExpression (97)
+        於左側： 64
+        於右側： 42
+    ArrayInsideExpression (98)
+        於左側： 66 68 69
+        於右側： 64 66
+    $@18 (99)
+        於左側： 65
+        於右側： 66
+    $@19 (100)
+        於左側： 67
+        於右側： 68
+    StmtParameter (101)
+        於左側： 70 71
+        於右側： 39 70
+    StmtParameterList (102)
+        於左側： 72 73
+        於右側： 70 71
+    Expr <obj_val> (103)
+        於左側： 74 77 80 83 86 89 92 95 98 101 102
+        於右側： 26 30 36 43 53 54 74 77 80 83 86 89 92 95 98 101 106 154
+    $@20 (104)
+        於左側： 75
+        於右側： 77
+    $@21 (105)
+        於左側： 76
+        於右側： 77
+    $@22 (106)
+        於左側： 78
+        於右側： 80
+    $@23 (107)
+        於左側： 79
+        於右側： 80
+    $@24 (108)
+        於左側： 81
+        於右側： 83
+    $@25 (109)
+        於左側： 82
+        於右側： 83
+    $@26 (110)
+        於左側： 84
+        於右側： 86
+    $@27 (111)
+        於左側： 85
+        於右側： 86
+    $@28 (112)
+        於左側： 87
+        於右側： 89
+    $@29 (113)
+        於左側： 88
+        於右側： 89
+    $@30 (114)
+        於左側： 90
+        於右側： 92
+    $@31 (115)
+        於左側： 91
+        於右側： 92
+    $@32 (116)
+        於左側： 93
+        於右側： 95
+    $@33 (117)
+        於左側： 94
+        於右側： 95
+    $@34 (118)
+        於左側： 96
+        於右側： 98
+    $@35 (119)
+        於左側： 97
+        於右側： 98
+    $@36 (120)
+        於左側： 99
+        於右側： 101
+    $@37 (121)
+        於左側： 100
+        於右側： 101
+    ExprLeftSide <obj_val> (122)
+        於左側： 103 105 106
+        於右側： 74 77 80 83 86 89 92 95 98 101
+    $@38 (123)
+        於左側： 104
+        於右側： 105
+    ExprRightSide <obj_val> (124)
+        於左側： 107 108
+        於右側： 8 72 102 107
+    ExprDoubleAnd <obj_val> (125)
+        於左側： 109 110
+        於右側： 107 108 109
+    ExprOr <obj_val> (126)
+        於左側： 111 112
+        於右側： 109 110 111
+    ExprXor <obj_val> (127)
+        於左側： 113 114
+        於右側： 111 112 113
+    ExprAnd <obj_val> (128)
+        於左側： 115 116
+        於右側： 113 114 115
+    ExprSame <obj_val> (129)
+        於左側： 117 118 119
+        於右側： 115 116 117 118
+    ExprBigOrSmall <obj_val> (130)
+        於左側： 120 121 122 123 124
+        於右側： 117 118 119 120 121 122 123
+    ExprBitwise <obj_val> (131)
+        於左側： 125 126 127
+        於右側： 120 121 122 123 124 125 126
+    ExprPlus <obj_val> (132)
+        於左側： 128 129 130
+        於右側： 18 45 47 66 68 125 126 127 128 129
+    ExprCross <obj_val> (133)
+        於左側： 131 132 133 134
+        於右側： 128 129 130 131 132 133
+    ExprFrontUnary <obj_val> (134)
+        於左側： 135 136 137 138 140 141
+        於右側： 131 132 133 134 135 136 137 138
+    $@39 (135)
+        於左側： 139
+        於右側： 140
+    ExprPostfix <obj_val> (136)
+        於左側： 142 143 144
+        於右側： 140 141
+    ExprValue <obj_val> (137)
+        於左側： 145 146 147 148 149 150 151 153 154
+        於右側： 142 143 144
+    $@40 (138)
+        於左側： 152
+        於右側： 153
+
+
+狀態 0
+
+    0 $accept: • Program $end
+
+    $end      使用規則 3 以縮減 (Program)
+    $default  使用規則 1 以縮減 ($@1)
+
+    Program  進入狀態 1
+    $@1      進入狀態 2
+
+
+狀態 1
+
+    0 $accept: Program • $end
+
+    $end  偏移，並進入狀態 3
+
+
+狀態 2
+
+    2 Program: $@1 • GlobalStmtList
+
+    VARIABLE_T  偏移，並進入狀態 4
+
+    GlobalStmtList      進入狀態 5
+    GlobalStmt          進入狀態 6
+    DefineVariableStmt  進入狀態 7
+    FunctionDefStmt     進入狀態 8
+
+
+狀態 3
+
+    0 $accept: Program $end •
+
+    $default  接受
+
+
+狀態 4
+
+    8 DefineVariableStmt: VARIABLE_T • IDENT VAL_ASSIGN ExprRightSide ';'
+   12 FunctionDefStmt: VARIABLE_T • IDENT $@2 '(' $@3 FunctionParameterStmtList ')' $@4 '{' StmtList '}'
+
+    IDENT  偏移，並進入狀態 9
+
+
+狀態 5
+
+    2 Program: $@1 GlobalStmtList •
+    4 GlobalStmtList: GlobalStmtList • GlobalStmt
+
+    VARIABLE_T  偏移，並進入狀態 4
+
+    $default  使用規則 2 以縮減 (Program)
+
+    GlobalStmt          進入狀態 10
+    DefineVariableStmt  進入狀態 7
+    FunctionDefStmt     進入狀態 8
+
+
+狀態 6
+
+    5 GlobalStmtList: GlobalStmt •
+
+    $default  使用規則 5 以縮減 (GlobalStmtList)
+
+
+狀態 7
+
+    6 GlobalStmt: DefineVariableStmt •
+
+    $default  使用規則 6 以縮減 (GlobalStmt)
+
+
+狀態 8
+
+    7 GlobalStmt: FunctionDefStmt •
+
+    $default  使用規則 7 以縮減 (GlobalStmt)
+
+
+狀態 9
+
+    8 DefineVariableStmt: VARIABLE_T IDENT • VAL_ASSIGN ExprRightSide ';'
+   12 FunctionDefStmt: VARIABLE_T IDENT • $@2 '(' $@3 FunctionParameterStmtList ')' $@4 '{' StmtList '}'
+
+    VAL_ASSIGN  偏移，並進入狀態 11
+
+    $default  使用規則 9 以縮減 ($@2)
+
+    $@2  進入狀態 12
+
+
+狀態 10
+
+    4 GlobalStmtList: GlobalStmtList GlobalStmt •
+
+    $default  使用規則 4 以縮減 (GlobalStmtList)
+
+
+狀態 11
+
+    8 DefineVariableStmt: VARIABLE_T IDENT VAL_ASSIGN • ExprRightSide ';'
+
+    BNT        偏移，並進入狀態 13
+    ADD        偏移，並進入狀態 14
+    SUB        偏移，並進入狀態 15
+    NOT        偏移，並進入狀態 16
+    BOOL_LIT   偏移，並進入狀態 17
+    CHAR_LIT   偏移，並進入狀態 18
+    INT_LIT    偏移，並進入狀態 19
+    FLOAT_LIT  偏移，並進入狀態 20
+    STR_LIT    偏移，並進入狀態 21
+    IDENT      偏移，並進入狀態 22
+    '('        偏移，並進入狀態 23
+
+    ExprRightSide   進入狀態 24
+    ExprDoubleAnd   進入狀態 25
+    ExprOr          進入狀態 26
+    ExprXor         進入狀態 27
+    ExprAnd         進入狀態 28
+    ExprSame        進入狀態 29
+    ExprBigOrSmall  進入狀態 30
+    ExprBitwise     進入狀態 31
+    ExprPlus        進入狀態 32
+    ExprCross       進入狀態 33
+    ExprFrontUnary  進入狀態 34
+    ExprPostfix     進入狀態 35
+    ExprValue       進入狀態 36
+
+
+狀態 12
+
+   12 FunctionDefStmt: VARIABLE_T IDENT $@2 • '(' $@3 FunctionParameterStmtList ')' $@4 '{' StmtList '}'
+
+    '('  偏移，並進入狀態 37
+
+
+狀態 13
+
+  136 ExprFrontUnary: BNT • ExprFrontUnary
+
+    BNT        偏移，並進入狀態 13
+    ADD        偏移，並進入狀態 14
+    SUB        偏移，並進入狀態 15
+    NOT        偏移，並進入狀態 16
+    BOOL_LIT   偏移，並進入狀態 17
+    CHAR_LIT   偏移，並進入狀態 18
+    INT_LIT    偏移，並進入狀態 19
+    FLOAT_LIT  偏移，並進入狀態 20
+    STR_LIT    偏移，並進入狀態 21
+    IDENT      偏移，並進入狀態 22
+    '('        偏移，並進入狀態 23
+
+    ExprFrontUnary  進入狀態 38
+    ExprPostfix     進入狀態 35
+    ExprValue       進入狀態 36
+
+
+狀態 14
+
+  137 ExprFrontUnary: ADD • ExprFrontUnary
+
+    BNT        偏移，並進入狀態 13
+    ADD        偏移，並進入狀態 14
+    SUB        偏移，並進入狀態 15
+    NOT        偏移，並進入狀態 16
+    BOOL_LIT   偏移，並進入狀態 17
+    CHAR_LIT   偏移，並進入狀態 18
+    INT_LIT    偏移，並進入狀態 19
+    FLOAT_LIT  偏移，並進入狀態 20
+    STR_LIT    偏移，並進入狀態 21
+    IDENT      偏移，並進入狀態 22
+    '('        偏移，並進入狀態 23
+
+    ExprFrontUnary  進入狀態 39
+    ExprPostfix     進入狀態 35
+    ExprValue       進入狀態 36
+
+
+狀態 15
+
+  138 ExprFrontUnary: SUB • ExprFrontUnary
+
+    BNT        偏移，並進入狀態 13
+    ADD        偏移，並進入狀態 14
+    SUB        偏移，並進入狀態 15
+    NOT        偏移，並進入狀態 16
+    BOOL_LIT   偏移，並進入狀態 17
+    CHAR_LIT   偏移，並進入狀態 18
+    INT_LIT    偏移，並進入狀態 19
+    FLOAT_LIT  偏移，並進入狀態 20
+    STR_LIT    偏移，並進入狀態 21
+    IDENT      偏移，並進入狀態 22
+    '('        偏移，並進入狀態 23
+
+    ExprFrontUnary  進入狀態 40
+    ExprPostfix     進入狀態 35
+    ExprValue       進入狀態 36
+
+
+狀態 16
+
+  135 ExprFrontUnary: NOT • ExprFrontUnary
+
+    BNT        偏移，並進入狀態 13
+    ADD        偏移，並進入狀態 14
+    SUB        偏移，並進入狀態 15
+    NOT        偏移，並進入狀態 16
+    BOOL_LIT   偏移，並進入狀態 17
+    CHAR_LIT   偏移，並進入狀態 18
+    INT_LIT    偏移，並進入狀態 19
+    FLOAT_LIT  偏移，並進入狀態 20
+    STR_LIT    偏移，並進入狀態 21
+    IDENT      偏移，並進入狀態 22
+    '('        偏移，並進入狀態 23
+
+    ExprFrontUnary  進入狀態 41
+    ExprPostfix     進入狀態 35
+    ExprValue       進入狀態 36
+
+
+狀態 17
+
+  147 ExprValue: BOOL_LIT •
+
+    $default  使用規則 147 以縮減 (ExprValue)
+
+
+狀態 18
+
+  148 ExprValue: CHAR_LIT •
+
+    $default  使用規則 148 以縮減 (ExprValue)
+
+
+狀態 19
+
+  145 ExprValue: INT_LIT •
+
+    $default  使用規則 145 以縮減 (ExprValue)
+
+
+狀態 20
+
+  146 ExprValue: FLOAT_LIT •
+
+    $default  使用規則 146 以縮減 (ExprValue)
+
+
+狀態 21
+
+  149 ExprValue: STR_LIT •
+
+    $default  使用規則 149 以縮減 (ExprValue)
+
+
+狀態 22
+
+  150 ExprValue: IDENT • '(' FunctionParameterStmtList ')'
+  151          | IDENT •
+  153          | IDENT • $@40 ArrayStmt
+
+    '('  偏移，並進入狀態 42
+
+    '['       使用規則 152 以縮減 ($@40)
+    $default  使用規則 151 以縮減 (ExprValue)
+
+    $@40  進入狀態 43
+
+
+狀態 23
+
+  140 ExprFrontUnary: '(' • VARIABLE_T ')' $@39 ExprPostfix
+  154 ExprValue: '(' • Expr ')'
+
+    BNT         偏移，並進入狀態 13
+    ADD         偏移，並進入狀態 14
+    SUB         偏移，並進入狀態 15
+    NOT         偏移，並進入狀態 16
+    VARIABLE_T  偏移，並進入狀態 44
+    BOOL_LIT    偏移，並進入狀態 17
+    CHAR_LIT    偏移，並進入狀態 18
+    INT_LIT     偏移，並進入狀態 19
+    FLOAT_LIT   偏移，並進入狀態 20
+    STR_LIT     偏移，並進入狀態 21
+    IDENT       偏移，並進入狀態 45
+    '('         偏移，並進入狀態 46
+
+    Expr            進入狀態 47
+    ExprLeftSide    進入狀態 48
+    ExprRightSide   進入狀態 49
+    ExprDoubleAnd   進入狀態 25
+    ExprOr          進入狀態 26
+    ExprXor         進入狀態 27
+    ExprAnd         進入狀態 28
+    ExprSame        進入狀態 29
+    ExprBigOrSmall  進入狀態 30
+    ExprBitwise     進入狀態 31
+    ExprPlus        進入狀態 32
+    ExprCross       進入狀態 33
+    ExprFrontUnary  進入狀態 34
+    ExprPostfix     進入狀態 35
+    ExprValue       進入狀態 36
+
+
+狀態 24
+
+    8 DefineVariableStmt: VARIABLE_T IDENT VAL_ASSIGN ExprRightSide • ';'
+  107 ExprRightSide: ExprRightSide • LOR ExprDoubleAnd
+
+    LOR  偏移，並進入狀態 50
+    ';'  偏移，並進入狀態 51
+
+
+狀態 25
+
+  108 ExprRightSide: ExprDoubleAnd •
+  109 ExprDoubleAnd: ExprDoubleAnd • LAN ExprOr
+
+    LAN  偏移，並進入狀態 52
+
+    $default  使用規則 108 以縮減 (ExprRightSide)
+
+
+狀態 26
+
+  110 ExprDoubleAnd: ExprOr •
+  111 ExprOr: ExprOr • BOR ExprXor
+
+    BOR  偏移，並進入狀態 53
+
+    $default  使用規則 110 以縮減 (ExprDoubleAnd)
+
+
+狀態 27
+
+  112 ExprOr: ExprXor •
+  113 ExprXor: ExprXor • BXO ExprAnd
+
+    BXO  偏移，並進入狀態 54
+
+    $default  使用規則 112 以縮減 (ExprOr)
+
+
+狀態 28
+
+  114 ExprXor: ExprAnd •
+  115 ExprAnd: ExprAnd • BAN ExprSame
+
+    BAN  偏移，並進入狀態 55
+
+    $default  使用規則 114 以縮減 (ExprXor)
+
+
+狀態 29
+
+  116 ExprAnd: ExprSame •
+  117 ExprSame: ExprSame • EQL ExprBigOrSmall
+  118         | ExprSame • NEQ ExprBigOrSmall
+
+    EQL  偏移，並進入狀態 56
+    NEQ  偏移，並進入狀態 57
+
+    $default  使用規則 116 以縮減 (ExprAnd)
+
+
+狀態 30
+
+  119 ExprSame: ExprBigOrSmall •
+  120 ExprBigOrSmall: ExprBigOrSmall • GTR ExprBitwise
+  121               | ExprBigOrSmall • GEQ ExprBitwise
+  122               | ExprBigOrSmall • LEQ ExprBitwise
+  123               | ExprBigOrSmall • LES ExprBitwise
+
+    GTR  偏移，並進入狀態 58
+    LES  偏移，並進入狀態 59
+    GEQ  偏移，並進入狀態 60
+    LEQ  偏移，並進入狀態 61
+
+    $default  使用規則 119 以縮減 (ExprSame)
+
+
+狀態 31
+
+  124 ExprBigOrSmall: ExprBitwise •
+  125 ExprBitwise: ExprBitwise • SHR ExprPlus
+  126            | ExprBitwise • SHL ExprPlus
+
+    SHR  偏移，並進入狀態 62
+    SHL  偏移，並進入狀態 63
+
+    $default  使用規則 124 以縮減 (ExprBigOrSmall)
+
+
+狀態 32
+
+  127 ExprBitwise: ExprPlus •
+  128 ExprPlus: ExprPlus • ADD ExprCross
+  129         | ExprPlus • SUB ExprCross
+
+    ADD  偏移，並進入狀態 64
+    SUB  偏移，並進入狀態 65
+
+    $default  使用規則 127 以縮減 (ExprBitwise)
+
+
+狀態 33
+
+  130 ExprPlus: ExprCross •
+  131 ExprCross: ExprCross • MUL ExprFrontUnary
+  132          | ExprCross • DIV ExprFrontUnary
+  133          | ExprCross • REM ExprFrontUnary
+
+    MUL  偏移，並進入狀態 66
+    DIV  偏移，並進入狀態 67
+    REM  偏移，並進入狀態 68
+
+    $default  使用規則 130 以縮減 (ExprPlus)
+
+
+狀態 34
+
+  134 ExprCross: ExprFrontUnary •
+
+    $default  使用規則 134 以縮減 (ExprCross)
+
+
+狀態 35
+
+  141 ExprFrontUnary: ExprPostfix •
+
+    $default  使用規則 141 以縮減 (ExprFrontUnary)
+
+
+狀態 36
+
+  142 ExprPostfix: ExprValue • INC_ASSIGN
+  143            | ExprValue • DEC_ASSIGN
+  144            | ExprValue •
+
+    INC_ASSIGN  偏移，並進入狀態 69
+    DEC_ASSIGN  偏移，並進入狀態 70
+
+    $default  使用規則 144 以縮減 (ExprPostfix)
+
+
+狀態 37
+
+   12 FunctionDefStmt: VARIABLE_T IDENT $@2 '(' • $@3 FunctionParameterStmtList ')' $@4 '{' StmtList '}'
+
+    $default  使用規則 10 以縮減 ($@3)
+
+    $@3  進入狀態 71
+
+
+狀態 38
+
+  136 ExprFrontUnary: BNT ExprFrontUnary •
+
+    $default  使用規則 136 以縮減 (ExprFrontUnary)
+
+
+狀態 39
+
+  137 ExprFrontUnary: ADD ExprFrontUnary •
+
+    $default  使用規則 137 以縮減 (ExprFrontUnary)
+
+
+狀態 40
+
+  138 ExprFrontUnary: SUB ExprFrontUnary •
+
+    $default  使用規則 138 以縮減 (ExprFrontUnary)
+
+
+狀態 41
+
+  135 ExprFrontUnary: NOT ExprFrontUnary •
+
+    $default  使用規則 135 以縮減 (ExprFrontUnary)
+
+
+狀態 42
+
+  150 ExprValue: IDENT '(' • FunctionParameterStmtList ')'
+
+    BNT         偏移，並進入狀態 13
+    ADD         偏移，並進入狀態 14
+    SUB         偏移，並進入狀態 15
+    NOT         偏移，並進入狀態 16
+    VARIABLE_T  偏移，並進入狀態 72
+    BOOL_LIT    偏移，並進入狀態 17
+    CHAR_LIT    偏移，並進入狀態 18
+    INT_LIT     偏移，並進入狀態 19
+    FLOAT_LIT   偏移，並進入狀態 20
+    STR_LIT     偏移，並進入狀態 21
+    IDENT       偏移，並進入狀態 22
+    '('         偏移，並進入狀態 23
+
+    $default  使用規則 15 以縮減 (FunctionParameterStmtList)
+
+    FunctionParameterStmtList  進入狀態 73
+    FunctionParameterStmt      進入狀態 74
+    ExprPlus                   進入狀態 75
+    ExprCross                  進入狀態 33
+    ExprFrontUnary             進入狀態 34
+    ExprPostfix                進入狀態 35
+    ExprValue                  進入狀態 36
+
+
+狀態 43
+
+  153 ExprValue: IDENT $@40 • ArrayStmt
+
+    '['  偏移，並進入狀態 76
+
+    ArrayStmt  進入狀態 77
+
+
+狀態 44
+
+  140 ExprFrontUnary: '(' VARIABLE_T • ')' $@39 ExprPostfix
+
+    ')'  偏移，並進入狀態 78
+
+
+狀態 45
+
+  103 ExprLeftSide: IDENT •
+  105             | IDENT • $@38 ArrayStmt
+  150 ExprValue: IDENT • '(' FunctionParameterStmtList ')'
+  151          | IDENT •
+  153          | IDENT • $@40 ArrayStmt
+
+    '('  偏移，並進入狀態 42
+
+    VAL_ASSIGN  使用規則 103 以縮減 (ExprLeftSide)
+    ADD_ASSIGN  使用規則 103 以縮減 (ExprLeftSide)
+    SUB_ASSIGN  使用規則 103 以縮減 (ExprLeftSide)
+    MUL_ASSIGN  使用規則 103 以縮減 (ExprLeftSide)
+    DIV_ASSIGN  使用規則 103 以縮減 (ExprLeftSide)
+    REM_ASSIGN  使用規則 103 以縮減 (ExprLeftSide)
+    BAN_ASSIGN  使用規則 103 以縮減 (ExprLeftSide)
+    BOR_ASSIGN  使用規則 103 以縮減 (ExprLeftSide)
+    SHR_ASSIGN  使用規則 103 以縮減 (ExprLeftSide)
+    SHL_ASSIGN  使用規則 103 以縮減 (ExprLeftSide)
+    '['         使用規則 104 以縮減 ($@38)
+    '['         [使用規則 152 以縮減 ($@40)]
+    $default    使用規則 151 以縮減 (ExprValue)
+
+    $@38  進入狀態 79
+    $@40  進入狀態 43
+
+
+狀態 46
+
+  106 ExprLeftSide: '(' • Expr ')'
+  140 ExprFrontUnary: '(' • VARIABLE_T ')' $@39 ExprPostfix
+  154 ExprValue: '(' • Expr ')'
+
+    BNT         偏移，並進入狀態 13
+    ADD         偏移，並進入狀態 14
+    SUB         偏移，並進入狀態 15
+    NOT         偏移，並進入狀態 16
+    VARIABLE_T  偏移，並進入狀態 44
+    BOOL_LIT    偏移，並進入狀態 17
+    CHAR_LIT    偏移，並進入狀態 18
+    INT_LIT     偏移，並進入狀態 19
+    FLOAT_LIT   偏移，並進入狀態 20
+    STR_LIT     偏移，並進入狀態 21
+    IDENT       偏移，並進入狀態 45
+    '('         偏移，並進入狀態 46
+
+    Expr            進入狀態 80
+    ExprLeftSide    進入狀態 48
+    ExprRightSide   進入狀態 49
+    ExprDoubleAnd   進入狀態 25
+    ExprOr          進入狀態 26
+    ExprXor         進入狀態 27
+    ExprAnd         進入狀態 28
+    ExprSame        進入狀態 29
+    ExprBigOrSmall  進入狀態 30
+    ExprBitwise     進入狀態 31
+    ExprPlus        進入狀態 32
+    ExprCross       進入狀態 33
+    ExprFrontUnary  進入狀態 34
+    ExprPostfix     進入狀態 35
+    ExprValue       進入狀態 36
+
+
+狀態 47
+
+  154 ExprValue: '(' Expr • ')'
+
+    ')'  偏移，並進入狀態 81
+
+
+狀態 48
+
+   74 Expr: ExprLeftSide • VAL_ASSIGN Expr
+   77     | ExprLeftSide • $@20 ADD_ASSIGN Expr $@21
+   80     | ExprLeftSide • $@22 SUB_ASSIGN Expr $@23
+   83     | ExprLeftSide • $@24 MUL_ASSIGN Expr $@25
+   86     | ExprLeftSide • $@26 DIV_ASSIGN Expr $@27
+   89     | ExprLeftSide • $@28 REM_ASSIGN Expr $@29
+   92     | ExprLeftSide • $@30 BAN_ASSIGN Expr $@31
+   95     | ExprLeftSide • $@32 BOR_ASSIGN Expr $@33
+   98     | ExprLeftSide • $@34 SHR_ASSIGN Expr $@35
+  101     | ExprLeftSide • $@36 SHL_ASSIGN Expr $@37
+
+    VAL_ASSIGN  偏移，並進入狀態 82
+
+    SUB_ASSIGN  使用規則 78 以縮減 ($@22)
+    MUL_ASSIGN  使用規則 81 以縮減 ($@24)
+    DIV_ASSIGN  使用規則 84 以縮減 ($@26)
+    REM_ASSIGN  使用規則 87 以縮減 ($@28)
+    BAN_ASSIGN  使用規則 90 以縮減 ($@30)
+    BOR_ASSIGN  使用規則 93 以縮減 ($@32)
+    SHR_ASSIGN  使用規則 96 以縮減 ($@34)
+    SHL_ASSIGN  使用規則 99 以縮減 ($@36)
+    $default    使用規則 75 以縮減 ($@20)
+
+    $@20  進入狀態 83
+    $@22  進入狀態 84
+    $@24  進入狀態 85
+    $@26  進入狀態 86
+    $@28  進入狀態 87
+    $@30  進入狀態 88
+    $@32  進入狀態 89
+    $@34  進入狀態 90
+    $@36  進入狀態 91
+
+
+狀態 49
+
+  102 Expr: ExprRightSide •
+  107 ExprRightSide: ExprRightSide • LOR ExprDoubleAnd
+
+    LOR  偏移，並進入狀態 50
+
+    $default  使用規則 102 以縮減 (Expr)
+
+
+狀態 50
+
+  107 ExprRightSide: ExprRightSide LOR • ExprDoubleAnd
+
+    BNT        偏移，並進入狀態 13
+    ADD        偏移，並進入狀態 14
+    SUB        偏移，並進入狀態 15
+    NOT        偏移，並進入狀態 16
+    BOOL_LIT   偏移，並進入狀態 17
+    CHAR_LIT   偏移，並進入狀態 18
+    INT_LIT    偏移，並進入狀態 19
+    FLOAT_LIT  偏移，並進入狀態 20
+    STR_LIT    偏移，並進入狀態 21
+    IDENT      偏移，並進入狀態 22
+    '('        偏移，並進入狀態 23
+
+    ExprDoubleAnd   進入狀態 92
+    ExprOr          進入狀態 26
+    ExprXor         進入狀態 27
+    ExprAnd         進入狀態 28
+    ExprSame        進入狀態 29
+    ExprBigOrSmall  進入狀態 30
+    ExprBitwise     進入狀態 31
+    ExprPlus        進入狀態 32
+    ExprCross       進入狀態 33
+    ExprFrontUnary  進入狀態 34
+    ExprPostfix     進入狀態 35
+    ExprValue       進入狀態 36
+
+
+狀態 51
+
+    8 DefineVariableStmt: VARIABLE_T IDENT VAL_ASSIGN ExprRightSide ';' •
+
+    $default  使用規則 8 以縮減 (DefineVariableStmt)
+
+
+狀態 52
+
+  109 ExprDoubleAnd: ExprDoubleAnd LAN • ExprOr
+
+    BNT        偏移，並進入狀態 13
+    ADD        偏移，並進入狀態 14
+    SUB        偏移，並進入狀態 15
+    NOT        偏移，並進入狀態 16
+    BOOL_LIT   偏移，並進入狀態 17
+    CHAR_LIT   偏移，並進入狀態 18
+    INT_LIT    偏移，並進入狀態 19
+    FLOAT_LIT  偏移，並進入狀態 20
+    STR_LIT    偏移，並進入狀態 21
+    IDENT      偏移，並進入狀態 22
+    '('        偏移，並進入狀態 23
+
+    ExprOr          進入狀態 93
+    ExprXor         進入狀態 27
+    ExprAnd         進入狀態 28
+    ExprSame        進入狀態 29
+    ExprBigOrSmall  進入狀態 30
+    ExprBitwise     進入狀態 31
+    ExprPlus        進入狀態 32
+    ExprCross       進入狀態 33
+    ExprFrontUnary  進入狀態 34
+    ExprPostfix     進入狀態 35
+    ExprValue       進入狀態 36
+
+
+狀態 53
+
+  111 ExprOr: ExprOr BOR • ExprXor
+
+    BNT        偏移，並進入狀態 13
+    ADD        偏移，並進入狀態 14
+    SUB        偏移，並進入狀態 15
+    NOT        偏移，並進入狀態 16
+    BOOL_LIT   偏移，並進入狀態 17
+    CHAR_LIT   偏移，並進入狀態 18
+    INT_LIT    偏移，並進入狀態 19
+    FLOAT_LIT  偏移，並進入狀態 20
+    STR_LIT    偏移，並進入狀態 21
+    IDENT      偏移，並進入狀態 22
+    '('        偏移，並進入狀態 23
+
+    ExprXor         進入狀態 94
+    ExprAnd         進入狀態 28
+    ExprSame        進入狀態 29
+    ExprBigOrSmall  進入狀態 30
+    ExprBitwise     進入狀態 31
+    ExprPlus        進入狀態 32
+    ExprCross       進入狀態 33
+    ExprFrontUnary  進入狀態 34
+    ExprPostfix     進入狀態 35
+    ExprValue       進入狀態 36
+
+
+狀態 54
+
+  113 ExprXor: ExprXor BXO • ExprAnd
+
+    BNT        偏移，並進入狀態 13
+    ADD        偏移，並進入狀態 14
+    SUB        偏移，並進入狀態 15
+    NOT        偏移，並進入狀態 16
+    BOOL_LIT   偏移，並進入狀態 17
+    CHAR_LIT   偏移，並進入狀態 18
+    INT_LIT    偏移，並進入狀態 19
+    FLOAT_LIT  偏移，並進入狀態 20
+    STR_LIT    偏移，並進入狀態 21
+    IDENT      偏移，並進入狀態 22
+    '('        偏移，並進入狀態 23
+
+    ExprAnd         進入狀態 95
+    ExprSame        進入狀態 29
+    ExprBigOrSmall  進入狀態 30
+    ExprBitwise     進入狀態 31
+    ExprPlus        進入狀態 32
+    ExprCross       進入狀態 33
+    ExprFrontUnary  進入狀態 34
+    ExprPostfix     進入狀態 35
+    ExprValue       進入狀態 36
+
+
+狀態 55
+
+  115 ExprAnd: ExprAnd BAN • ExprSame
+
+    BNT        偏移，並進入狀態 13
+    ADD        偏移，並進入狀態 14
+    SUB        偏移，並進入狀態 15
+    NOT        偏移，並進入狀態 16
+    BOOL_LIT   偏移，並進入狀態 17
+    CHAR_LIT   偏移，並進入狀態 18
+    INT_LIT    偏移，並進入狀態 19
+    FLOAT_LIT  偏移，並進入狀態 20
+    STR_LIT    偏移，並進入狀態 21
+    IDENT      偏移，並進入狀態 22
+    '('        偏移，並進入狀態 23
+
+    ExprSame        進入狀態 96
+    ExprBigOrSmall  進入狀態 30
+    ExprBitwise     進入狀態 31
+    ExprPlus        進入狀態 32
+    ExprCross       進入狀態 33
+    ExprFrontUnary  進入狀態 34
+    ExprPostfix     進入狀態 35
+    ExprValue       進入狀態 36
+
+
+狀態 56
+
+  117 ExprSame: ExprSame EQL • ExprBigOrSmall
+
+    BNT        偏移，並進入狀態 13
+    ADD        偏移，並進入狀態 14
+    SUB        偏移，並進入狀態 15
+    NOT        偏移，並進入狀態 16
+    BOOL_LIT   偏移，並進入狀態 17
+    CHAR_LIT   偏移，並進入狀態 18
+    INT_LIT    偏移，並進入狀態 19
+    FLOAT_LIT  偏移，並進入狀態 20
+    STR_LIT    偏移，並進入狀態 21
+    IDENT      偏移，並進入狀態 22
+    '('        偏移，並進入狀態 23
+
+    ExprBigOrSmall  進入狀態 97
+    ExprBitwise     進入狀態 31
+    ExprPlus        進入狀態 32
+    ExprCross       進入狀態 33
+    ExprFrontUnary  進入狀態 34
+    ExprPostfix     進入狀態 35
+    ExprValue       進入狀態 36
+
+
+狀態 57
+
+  118 ExprSame: ExprSame NEQ • ExprBigOrSmall
+
+    BNT        偏移，並進入狀態 13
+    ADD        偏移，並進入狀態 14
+    SUB        偏移，並進入狀態 15
+    NOT        偏移，並進入狀態 16
+    BOOL_LIT   偏移，並進入狀態 17
+    CHAR_LIT   偏移，並進入狀態 18
+    INT_LIT    偏移，並進入狀態 19
+    FLOAT_LIT  偏移，並進入狀態 20
+    STR_LIT    偏移，並進入狀態 21
+    IDENT      偏移，並進入狀態 22
+    '('        偏移，並進入狀態 23
+
+    ExprBigOrSmall  進入狀態 98
+    ExprBitwise     進入狀態 31
+    ExprPlus        進入狀態 32
+    ExprCross       進入狀態 33
+    ExprFrontUnary  進入狀態 34
+    ExprPostfix     進入狀態 35
+    ExprValue       進入狀態 36
+
+
+狀態 58
+
+  120 ExprBigOrSmall: ExprBigOrSmall GTR • ExprBitwise
+
+    BNT        偏移，並進入狀態 13
+    ADD        偏移，並進入狀態 14
+    SUB        偏移，並進入狀態 15
+    NOT        偏移，並進入狀態 16
+    BOOL_LIT   偏移，並進入狀態 17
+    CHAR_LIT   偏移，並進入狀態 18
+    INT_LIT    偏移，並進入狀態 19
+    FLOAT_LIT  偏移，並進入狀態 20
+    STR_LIT    偏移，並進入狀態 21
+    IDENT      偏移，並進入狀態 22
+    '('        偏移，並進入狀態 23
+
+    ExprBitwise     進入狀態 99
+    ExprPlus        進入狀態 32
+    ExprCross       進入狀態 33
+    ExprFrontUnary  進入狀態 34
+    ExprPostfix     進入狀態 35
+    ExprValue       進入狀態 36
+
+
+狀態 59
+
+  123 ExprBigOrSmall: ExprBigOrSmall LES • ExprBitwise
+
+    BNT        偏移，並進入狀態 13
+    ADD        偏移，並進入狀態 14
+    SUB        偏移，並進入狀態 15
+    NOT        偏移，並進入狀態 16
+    BOOL_LIT   偏移，並進入狀態 17
+    CHAR_LIT   偏移，並進入狀態 18
+    INT_LIT    偏移，並進入狀態 19
+    FLOAT_LIT  偏移，並進入狀態 20
+    STR_LIT    偏移，並進入狀態 21
+    IDENT      偏移，並進入狀態 22
+    '('        偏移，並進入狀態 23
+
+    ExprBitwise     進入狀態 100
+    ExprPlus        進入狀態 32
+    ExprCross       進入狀態 33
+    ExprFrontUnary  進入狀態 34
+    ExprPostfix     進入狀態 35
+    ExprValue       進入狀態 36
+
+
+狀態 60
+
+  121 ExprBigOrSmall: ExprBigOrSmall GEQ • ExprBitwise
+
+    BNT        偏移，並進入狀態 13
+    ADD        偏移，並進入狀態 14
+    SUB        偏移，並進入狀態 15
+    NOT        偏移，並進入狀態 16
+    BOOL_LIT   偏移，並進入狀態 17
+    CHAR_LIT   偏移，並進入狀態 18
+    INT_LIT    偏移，並進入狀態 19
+    FLOAT_LIT  偏移，並進入狀態 20
+    STR_LIT    偏移，並進入狀態 21
+    IDENT      偏移，並進入狀態 22
+    '('        偏移，並進入狀態 23
+
+    ExprBitwise     進入狀態 101
+    ExprPlus        進入狀態 32
+    ExprCross       進入狀態 33
+    ExprFrontUnary  進入狀態 34
+    ExprPostfix     進入狀態 35
+    ExprValue       進入狀態 36
+
+
+狀態 61
+
+  122 ExprBigOrSmall: ExprBigOrSmall LEQ • ExprBitwise
+
+    BNT        偏移，並進入狀態 13
+    ADD        偏移，並進入狀態 14
+    SUB        偏移，並進入狀態 15
+    NOT        偏移，並進入狀態 16
+    BOOL_LIT   偏移，並進入狀態 17
+    CHAR_LIT   偏移，並進入狀態 18
+    INT_LIT    偏移，並進入狀態 19
+    FLOAT_LIT  偏移，並進入狀態 20
+    STR_LIT    偏移，並進入狀態 21
+    IDENT      偏移，並進入狀態 22
+    '('        偏移，並進入狀態 23
+
+    ExprBitwise     進入狀態 102
+    ExprPlus        進入狀態 32
+    ExprCross       進入狀態 33
+    ExprFrontUnary  進入狀態 34
+    ExprPostfix     進入狀態 35
+    ExprValue       進入狀態 36
+
+
+狀態 62
+
+  125 ExprBitwise: ExprBitwise SHR • ExprPlus
+
+    BNT        偏移，並進入狀態 13
+    ADD        偏移，並進入狀態 14
+    SUB        偏移，並進入狀態 15
+    NOT        偏移，並進入狀態 16
+    BOOL_LIT   偏移，並進入狀態 17
+    CHAR_LIT   偏移，並進入狀態 18
+    INT_LIT    偏移，並進入狀態 19
+    FLOAT_LIT  偏移，並進入狀態 20
+    STR_LIT    偏移，並進入狀態 21
+    IDENT      偏移，並進入狀態 22
+    '('        偏移，並進入狀態 23
+
+    ExprPlus        進入狀態 103
+    ExprCross       進入狀態 33
+    ExprFrontUnary  進入狀態 34
+    ExprPostfix     進入狀態 35
+    ExprValue       進入狀態 36
+
+
+狀態 63
+
+  126 ExprBitwise: ExprBitwise SHL • ExprPlus
+
+    BNT        偏移，並進入狀態 13
+    ADD        偏移，並進入狀態 14
+    SUB        偏移，並進入狀態 15
+    NOT        偏移，並進入狀態 16
+    BOOL_LIT   偏移，並進入狀態 17
+    CHAR_LIT   偏移，並進入狀態 18
+    INT_LIT    偏移，並進入狀態 19
+    FLOAT_LIT  偏移，並進入狀態 20
+    STR_LIT    偏移，並進入狀態 21
+    IDENT      偏移，並進入狀態 22
+    '('        偏移，並進入狀態 23
+
+    ExprPlus        進入狀態 104
+    ExprCross       進入狀態 33
+    ExprFrontUnary  進入狀態 34
+    ExprPostfix     進入狀態 35
+    ExprValue       進入狀態 36
+
+
+狀態 64
+
+  128 ExprPlus: ExprPlus ADD • ExprCross
+
+    BNT        偏移，並進入狀態 13
+    ADD        偏移，並進入狀態 14
+    SUB        偏移，並進入狀態 15
+    NOT        偏移，並進入狀態 16
+    BOOL_LIT   偏移，並進入狀態 17
+    CHAR_LIT   偏移，並進入狀態 18
+    INT_LIT    偏移，並進入狀態 19
+    FLOAT_LIT  偏移，並進入狀態 20
+    STR_LIT    偏移，並進入狀態 21
+    IDENT      偏移，並進入狀態 22
+    '('        偏移，並進入狀態 23
+
+    ExprCross       進入狀態 105
+    ExprFrontUnary  進入狀態 34
+    ExprPostfix     進入狀態 35
+    ExprValue       進入狀態 36
+
+
+狀態 65
+
+  129 ExprPlus: ExprPlus SUB • ExprCross
+
+    BNT        偏移，並進入狀態 13
+    ADD        偏移，並進入狀態 14
+    SUB        偏移，並進入狀態 15
+    NOT        偏移，並進入狀態 16
+    BOOL_LIT   偏移，並進入狀態 17
+    CHAR_LIT   偏移，並進入狀態 18
+    INT_LIT    偏移，並進入狀態 19
+    FLOAT_LIT  偏移，並進入狀態 20
+    STR_LIT    偏移，並進入狀態 21
+    IDENT      偏移，並進入狀態 22
+    '('        偏移，並進入狀態 23
+
+    ExprCross       進入狀態 106
+    ExprFrontUnary  進入狀態 34
+    ExprPostfix     進入狀態 35
+    ExprValue       進入狀態 36
+
+
+狀態 66
+
+  131 ExprCross: ExprCross MUL • ExprFrontUnary
+
+    BNT        偏移，並進入狀態 13
+    ADD        偏移，並進入狀態 14
+    SUB        偏移，並進入狀態 15
+    NOT        偏移，並進入狀態 16
+    BOOL_LIT   偏移，並進入狀態 17
+    CHAR_LIT   偏移，並進入狀態 18
+    INT_LIT    偏移，並進入狀態 19
+    FLOAT_LIT  偏移，並進入狀態 20
+    STR_LIT    偏移，並進入狀態 21
+    IDENT      偏移，並進入狀態 22
+    '('        偏移，並進入狀態 23
+
+    ExprFrontUnary  進入狀態 107
+    ExprPostfix     進入狀態 35
+    ExprValue       進入狀態 36
+
+
+狀態 67
+
+  132 ExprCross: ExprCross DIV • ExprFrontUnary
+
+    BNT        偏移，並進入狀態 13
+    ADD        偏移，並進入狀態 14
+    SUB        偏移，並進入狀態 15
+    NOT        偏移，並進入狀態 16
+    BOOL_LIT   偏移，並進入狀態 17
+    CHAR_LIT   偏移，並進入狀態 18
+    INT_LIT    偏移，並進入狀態 19
+    FLOAT_LIT  偏移，並進入狀態 20
+    STR_LIT    偏移，並進入狀態 21
+    IDENT      偏移，並進入狀態 22
+    '('        偏移，並進入狀態 23
+
+    ExprFrontUnary  進入狀態 108
+    ExprPostfix     進入狀態 35
+    ExprValue       進入狀態 36
+
+
+狀態 68
+
+  133 ExprCross: ExprCross REM • ExprFrontUnary
+
+    BNT        偏移，並進入狀態 13
+    ADD        偏移，並進入狀態 14
+    SUB        偏移，並進入狀態 15
+    NOT        偏移，並進入狀態 16
+    BOOL_LIT   偏移，並進入狀態 17
+    CHAR_LIT   偏移，並進入狀態 18
+    INT_LIT    偏移，並進入狀態 19
+    FLOAT_LIT  偏移，並進入狀態 20
+    STR_LIT    偏移，並進入狀態 21
+    IDENT      偏移，並進入狀態 22
+    '('        偏移，並進入狀態 23
+
+    ExprFrontUnary  進入狀態 109
+    ExprPostfix     進入狀態 35
+    ExprValue       進入狀態 36
+
+
+狀態 69
+
+  142 ExprPostfix: ExprValue INC_ASSIGN •
+
+    $default  使用規則 142 以縮減 (ExprPostfix)
+
+
+狀態 70
+
+  143 ExprPostfix: ExprValue DEC_ASSIGN •
+
+    $default  使用規則 143 以縮減 (ExprPostfix)
+
+
+狀態 71
+
+   12 FunctionDefStmt: VARIABLE_T IDENT $@2 '(' $@3 • FunctionParameterStmtList ')' $@4 '{' StmtList '}'
+
+    BNT         偏移，並進入狀態 13
+    ADD         偏移，並進入狀態 14
+    SUB         偏移，並進入狀態 15
+    NOT         偏移，並進入狀態 16
+    VARIABLE_T  偏移，並進入狀態 72
+    BOOL_LIT    偏移，並進入狀態 17
+    CHAR_LIT    偏移，並進入狀態 18
+    INT_LIT     偏移，並進入狀態 19
+    FLOAT_LIT   偏移，並進入狀態 20
+    STR_LIT     偏移，並進入狀態 21
+    IDENT       偏移，並進入狀態 22
+    '('         偏移，並進入狀態 23
+
+    $default  使用規則 15 以縮減 (FunctionParameterStmtList)
+
+    FunctionParameterStmtList  進入狀態 110
+    FunctionParameterStmt      進入狀態 74
+    ExprPlus                   進入狀態 75
+    ExprCross                  進入狀態 33
+    ExprFrontUnary             進入狀態 34
+    ExprPostfix                進入狀態 35
+    ExprValue                  進入狀態 36
+
+
+狀態 72
+
+   16 FunctionParameterStmt: VARIABLE_T • IDENT
+   17                      | VARIABLE_T • IDENT '[' ']'
+
+    IDENT  偏移，並進入狀態 111
+
+
+狀態 73
+
+   13 FunctionParameterStmtList: FunctionParameterStmtList • ',' FunctionParameterStmt
+  150 ExprValue: IDENT '(' FunctionParameterStmtList • ')'
+
+    ')'  偏移，並進入狀態 112
+    ','  偏移，並進入狀態 113
+
+
+狀態 74
+
+   14 FunctionParameterStmtList: FunctionParameterStmt •
+
+    $default  使用規則 14 以縮減 (FunctionParameterStmtList)
+
+
+狀態 75
+
+   18 FunctionParameterStmt: ExprPlus •
+  128 ExprPlus: ExprPlus • ADD ExprCross
+  129         | ExprPlus • SUB ExprCross
+
+    ADD  偏移，並進入狀態 64
+    SUB  偏移，並進入狀態 65
+
+    $default  使用規則 18 以縮減 (FunctionParameterStmt)
+
+
+狀態 76
+
+   61 ArrayStmt: '[' • ArrayVariable ']'
+
+    INT_LIT  偏移，並進入狀態 114
+    IDENT    偏移，並進入狀態 115
+
+    ArrayVariable  進入狀態 116
+
+
+狀態 77
+
+   60 ArrayStmt: ArrayStmt • $@17 '[' ArrayVariable ']'
+  153 ExprValue: IDENT $@40 ArrayStmt •
+
+    '['       使用規則 59 以縮減 ($@17)
+    $default  使用規則 153 以縮減 (ExprValue)
+
+    $@17  進入狀態 117
+
+
+狀態 78
+
+  140 ExprFrontUnary: '(' VARIABLE_T ')' • $@39 ExprPostfix
+
+    $default  使用規則 139 以縮減 ($@39)
+
+    $@39  進入狀態 118
+
+
+狀態 79
+
+  105 ExprLeftSide: IDENT $@38 • ArrayStmt
+
+    '['  偏移，並進入狀態 76
+
+    ArrayStmt  進入狀態 119
+
+
+狀態 80
+
+  106 ExprLeftSide: '(' Expr • ')'
+  154 ExprValue: '(' Expr • ')'
+
+    ')'  偏移，並進入狀態 120
+
+
+狀態 81
+
+  154 ExprValue: '(' Expr ')' •
+
+    $default  使用規則 154 以縮減 (ExprValue)
+
+
+狀態 82
+
+   74 Expr: ExprLeftSide VAL_ASSIGN • Expr
+
+    BNT        偏移，並進入狀態 13
+    ADD        偏移，並進入狀態 14
+    SUB        偏移，並進入狀態 15
+    NOT        偏移，並進入狀態 16
+    BOOL_LIT   偏移，並進入狀態 17
+    CHAR_LIT   偏移，並進入狀態 18
+    INT_LIT    偏移，並進入狀態 19
+    FLOAT_LIT  偏移，並進入狀態 20
+    STR_LIT    偏移，並進入狀態 21
+    IDENT      偏移，並進入狀態 45
+    '('        偏移，並進入狀態 46
+
+    Expr            進入狀態 121
+    ExprLeftSide    進入狀態 48
+    ExprRightSide   進入狀態 49
+    ExprDoubleAnd   進入狀態 25
+    ExprOr          進入狀態 26
+    ExprXor         進入狀態 27
+    ExprAnd         進入狀態 28
+    ExprSame        進入狀態 29
+    ExprBigOrSmall  進入狀態 30
+    ExprBitwise     進入狀態 31
+    ExprPlus        進入狀態 32
+    ExprCross       進入狀態 33
+    ExprFrontUnary  進入狀態 34
+    ExprPostfix     進入狀態 35
+    ExprValue       進入狀態 36
+
+
+狀態 83
+
+   77 Expr: ExprLeftSide $@20 • ADD_ASSIGN Expr $@21
+
+    ADD_ASSIGN  偏移，並進入狀態 122
+
+
+狀態 84
+
+   80 Expr: ExprLeftSide $@22 • SUB_ASSIGN Expr $@23
+
+    SUB_ASSIGN  偏移，並進入狀態 123
+
+
+狀態 85
+
+   83 Expr: ExprLeftSide $@24 • MUL_ASSIGN Expr $@25
+
+    MUL_ASSIGN  偏移，並進入狀態 124
+
+
+狀態 86
+
+   86 Expr: ExprLeftSide $@26 • DIV_ASSIGN Expr $@27
+
+    DIV_ASSIGN  偏移，並進入狀態 125
+
+
+狀態 87
+
+   89 Expr: ExprLeftSide $@28 • REM_ASSIGN Expr $@29
+
+    REM_ASSIGN  偏移，並進入狀態 126
+
+
+狀態 88
+
+   92 Expr: ExprLeftSide $@30 • BAN_ASSIGN Expr $@31
+
+    BAN_ASSIGN  偏移，並進入狀態 127
+
+
+狀態 89
+
+   95 Expr: ExprLeftSide $@32 • BOR_ASSIGN Expr $@33
+
+    BOR_ASSIGN  偏移，並進入狀態 128
+
+
+狀態 90
+
+   98 Expr: ExprLeftSide $@34 • SHR_ASSIGN Expr $@35
+
+    SHR_ASSIGN  偏移，並進入狀態 129
+
+
+狀態 91
+
+  101 Expr: ExprLeftSide $@36 • SHL_ASSIGN Expr $@37
+
+    SHL_ASSIGN  偏移，並進入狀態 130
+
+
+狀態 92
+
+  107 ExprRightSide: ExprRightSide LOR ExprDoubleAnd •
+  109 ExprDoubleAnd: ExprDoubleAnd • LAN ExprOr
+
+    LAN  偏移，並進入狀態 52
+
+    $default  使用規則 107 以縮減 (ExprRightSide)
+
+
+狀態 93
+
+  109 ExprDoubleAnd: ExprDoubleAnd LAN ExprOr •
+  111 ExprOr: ExprOr • BOR ExprXor
+
+    BOR  偏移，並進入狀態 53
+
+    $default  使用規則 109 以縮減 (ExprDoubleAnd)
+
+
+狀態 94
+
+  111 ExprOr: ExprOr BOR ExprXor •
+  113 ExprXor: ExprXor • BXO ExprAnd
+
+    BXO  偏移，並進入狀態 54
+
+    $default  使用規則 111 以縮減 (ExprOr)
+
+
+狀態 95
+
+  113 ExprXor: ExprXor BXO ExprAnd •
+  115 ExprAnd: ExprAnd • BAN ExprSame
+
+    BAN  偏移，並進入狀態 55
+
+    $default  使用規則 113 以縮減 (ExprXor)
+
+
+狀態 96
+
+  115 ExprAnd: ExprAnd BAN ExprSame •
+  117 ExprSame: ExprSame • EQL ExprBigOrSmall
+  118         | ExprSame • NEQ ExprBigOrSmall
+
+    EQL  偏移，並進入狀態 56
+    NEQ  偏移，並進入狀態 57
+
+    $default  使用規則 115 以縮減 (ExprAnd)
+
+
+狀態 97
+
+  117 ExprSame: ExprSame EQL ExprBigOrSmall •
+  120 ExprBigOrSmall: ExprBigOrSmall • GTR ExprBitwise
+  121               | ExprBigOrSmall • GEQ ExprBitwise
+  122               | ExprBigOrSmall • LEQ ExprBitwise
+  123               | ExprBigOrSmall • LES ExprBitwise
+
+    GTR  偏移，並進入狀態 58
+    LES  偏移，並進入狀態 59
+    GEQ  偏移，並進入狀態 60
+    LEQ  偏移，並進入狀態 61
+
+    $default  使用規則 117 以縮減 (ExprSame)
+
+
+狀態 98
+
+  118 ExprSame: ExprSame NEQ ExprBigOrSmall •
+  120 ExprBigOrSmall: ExprBigOrSmall • GTR ExprBitwise
+  121               | ExprBigOrSmall • GEQ ExprBitwise
+  122               | ExprBigOrSmall • LEQ ExprBitwise
+  123               | ExprBigOrSmall • LES ExprBitwise
+
+    GTR  偏移，並進入狀態 58
+    LES  偏移，並進入狀態 59
+    GEQ  偏移，並進入狀態 60
+    LEQ  偏移，並進入狀態 61
+
+    $default  使用規則 118 以縮減 (ExprSame)
+
+
+狀態 99
+
+  120 ExprBigOrSmall: ExprBigOrSmall GTR ExprBitwise •
+  125 ExprBitwise: ExprBitwise • SHR ExprPlus
+  126            | ExprBitwise • SHL ExprPlus
+
+    SHR  偏移，並進入狀態 62
+    SHL  偏移，並進入狀態 63
+
+    $default  使用規則 120 以縮減 (ExprBigOrSmall)
+
+
+狀態 100
+
+  123 ExprBigOrSmall: ExprBigOrSmall LES ExprBitwise •
+  125 ExprBitwise: ExprBitwise • SHR ExprPlus
+  126            | ExprBitwise • SHL ExprPlus
+
+    SHR  偏移，並進入狀態 62
+    SHL  偏移，並進入狀態 63
+
+    $default  使用規則 123 以縮減 (ExprBigOrSmall)
+
+
+狀態 101
+
+  121 ExprBigOrSmall: ExprBigOrSmall GEQ ExprBitwise •
+  125 ExprBitwise: ExprBitwise • SHR ExprPlus
+  126            | ExprBitwise • SHL ExprPlus
+
+    SHR  偏移，並進入狀態 62
+    SHL  偏移，並進入狀態 63
+
+    $default  使用規則 121 以縮減 (ExprBigOrSmall)
+
+
+狀態 102
+
+  122 ExprBigOrSmall: ExprBigOrSmall LEQ ExprBitwise •
+  125 ExprBitwise: ExprBitwise • SHR ExprPlus
+  126            | ExprBitwise • SHL ExprPlus
+
+    SHR  偏移，並進入狀態 62
+    SHL  偏移，並進入狀態 63
+
+    $default  使用規則 122 以縮減 (ExprBigOrSmall)
+
+
+狀態 103
+
+  125 ExprBitwise: ExprBitwise SHR ExprPlus •
+  128 ExprPlus: ExprPlus • ADD ExprCross
+  129         | ExprPlus • SUB ExprCross
+
+    ADD  偏移，並進入狀態 64
+    SUB  偏移，並進入狀態 65
+
+    $default  使用規則 125 以縮減 (ExprBitwise)
+
+
+狀態 104
+
+  126 ExprBitwise: ExprBitwise SHL ExprPlus •
+  128 ExprPlus: ExprPlus • ADD ExprCross
+  129         | ExprPlus • SUB ExprCross
+
+    ADD  偏移，並進入狀態 64
+    SUB  偏移，並進入狀態 65
+
+    $default  使用規則 126 以縮減 (ExprBitwise)
+
+
+狀態 105
+
+  128 ExprPlus: ExprPlus ADD ExprCross •
+  131 ExprCross: ExprCross • MUL ExprFrontUnary
+  132          | ExprCross • DIV ExprFrontUnary
+  133          | ExprCross • REM ExprFrontUnary
+
+    MUL  偏移，並進入狀態 66
+    DIV  偏移，並進入狀態 67
+    REM  偏移，並進入狀態 68
+
+    $default  使用規則 128 以縮減 (ExprPlus)
+
+
+狀態 106
+
+  129 ExprPlus: ExprPlus SUB ExprCross •
+  131 ExprCross: ExprCross • MUL ExprFrontUnary
+  132          | ExprCross • DIV ExprFrontUnary
+  133          | ExprCross • REM ExprFrontUnary
+
+    MUL  偏移，並進入狀態 66
+    DIV  偏移，並進入狀態 67
+    REM  偏移，並進入狀態 68
+
+    $default  使用規則 129 以縮減 (ExprPlus)
+
+
+狀態 107
+
+  131 ExprCross: ExprCross MUL ExprFrontUnary •
+
+    $default  使用規則 131 以縮減 (ExprCross)
+
+
+狀態 108
+
+  132 ExprCross: ExprCross DIV ExprFrontUnary •
+
+    $default  使用規則 132 以縮減 (ExprCross)
+
+
+狀態 109
+
+  133 ExprCross: ExprCross REM ExprFrontUnary •
+
+    $default  使用規則 133 以縮減 (ExprCross)
+
+
+狀態 110
+
+   12 FunctionDefStmt: VARIABLE_T IDENT $@2 '(' $@3 FunctionParameterStmtList • ')' $@4 '{' StmtList '}'
+   13 FunctionParameterStmtList: FunctionParameterStmtList • ',' FunctionParameterStmt
+
+    ')'  偏移，並進入狀態 131
+    ','  偏移，並進入狀態 113
+
+
+狀態 111
+
+   16 FunctionParameterStmt: VARIABLE_T IDENT •
+   17                      | VARIABLE_T IDENT • '[' ']'
+
+    '['  偏移，並進入狀態 132
+
+    $default  使用規則 16 以縮減 (FunctionParameterStmt)
+
+
+狀態 112
+
+  150 ExprValue: IDENT '(' FunctionParameterStmtList ')' •
+
+    $default  使用規則 150 以縮減 (ExprValue)
+
+
+狀態 113
+
+   13 FunctionParameterStmtList: FunctionParameterStmtList ',' • FunctionParameterStmt
+
+    BNT         偏移，並進入狀態 13
+    ADD         偏移，並進入狀態 14
+    SUB         偏移，並進入狀態 15
+    NOT         偏移，並進入狀態 16
+    VARIABLE_T  偏移，並進入狀態 72
+    BOOL_LIT    偏移，並進入狀態 17
+    CHAR_LIT    偏移，並進入狀態 18
+    INT_LIT     偏移，並進入狀態 19
+    FLOAT_LIT   偏移，並進入狀態 20
+    STR_LIT     偏移，並進入狀態 21
+    IDENT       偏移，並進入狀態 22
+    '('         偏移，並進入狀態 23
+
+    FunctionParameterStmt  進入狀態 133
+    ExprPlus               進入狀態 75
+    ExprCross              進入狀態 33
+    ExprFrontUnary         進入狀態 34
+    ExprPostfix            進入狀態 35
+    ExprValue              進入狀態 36
+
+
+狀態 114
+
+   63 ArrayVariable: INT_LIT •
+
+    $default  使用規則 63 以縮減 (ArrayVariable)
+
+
+狀態 115
+
+   62 ArrayVariable: IDENT •
+
+    $default  使用規則 62 以縮減 (ArrayVariable)
+
+
+狀態 116
+
+   61 ArrayStmt: '[' ArrayVariable • ']'
+
+    ']'  偏移，並進入狀態 134
+
+
+狀態 117
+
+   60 ArrayStmt: ArrayStmt $@17 • '[' ArrayVariable ']'
+
+    '['  偏移，並進入狀態 135
+
+
+狀態 118
+
+  140 ExprFrontUnary: '(' VARIABLE_T ')' $@39 • ExprPostfix
+
+    BOOL_LIT   偏移，並進入狀態 17
+    CHAR_LIT   偏移，並進入狀態 18
+    INT_LIT    偏移，並進入狀態 19
+    FLOAT_LIT  偏移，並進入狀態 20
+    STR_LIT    偏移，並進入狀態 21
+    IDENT      偏移，並進入狀態 22
+    '('        偏移，並進入狀態 136
+
+    ExprPostfix  進入狀態 137
+    ExprValue    進入狀態 36
+
+
+狀態 119
+
+   60 ArrayStmt: ArrayStmt • $@17 '[' ArrayVariable ']'
+  105 ExprLeftSide: IDENT $@38 ArrayStmt •
+
+    '['       使用規則 59 以縮減 ($@17)
+    $default  使用規則 105 以縮減 (ExprLeftSide)
+
+    $@17  進入狀態 117
+
+
+狀態 120
+
+  106 ExprLeftSide: '(' Expr ')' •
+  154 ExprValue: '(' Expr ')' •
+
+    VAL_ASSIGN  使用規則 106 以縮減 (ExprLeftSide)
+    ADD_ASSIGN  使用規則 106 以縮減 (ExprLeftSide)
+    SUB_ASSIGN  使用規則 106 以縮減 (ExprLeftSide)
+    MUL_ASSIGN  使用規則 106 以縮減 (ExprLeftSide)
+    DIV_ASSIGN  使用規則 106 以縮減 (ExprLeftSide)
+    REM_ASSIGN  使用規則 106 以縮減 (ExprLeftSide)
+    BAN_ASSIGN  使用規則 106 以縮減 (ExprLeftSide)
+    BOR_ASSIGN  使用規則 106 以縮減 (ExprLeftSide)
+    SHR_ASSIGN  使用規則 106 以縮減 (ExprLeftSide)
+    SHL_ASSIGN  使用規則 106 以縮減 (ExprLeftSide)
+    $default    使用規則 154 以縮減 (ExprValue)
+
+
+狀態 121
+
+   74 Expr: ExprLeftSide VAL_ASSIGN Expr •
+
+    $default  使用規則 74 以縮減 (Expr)
+
+
+狀態 122
+
+   77 Expr: ExprLeftSide $@20 ADD_ASSIGN • Expr $@21
+
+    BNT        偏移，並進入狀態 13
+    ADD        偏移，並進入狀態 14
+    SUB        偏移，並進入狀態 15
+    NOT        偏移，並進入狀態 16
+    BOOL_LIT   偏移，並進入狀態 17
+    CHAR_LIT   偏移，並進入狀態 18
+    INT_LIT    偏移，並進入狀態 19
+    FLOAT_LIT  偏移，並進入狀態 20
+    STR_LIT    偏移，並進入狀態 21
+    IDENT      偏移，並進入狀態 45
+    '('        偏移，並進入狀態 46
+
+    Expr            進入狀態 138
+    ExprLeftSide    進入狀態 48
+    ExprRightSide   進入狀態 49
+    ExprDoubleAnd   進入狀態 25
+    ExprOr          進入狀態 26
+    ExprXor         進入狀態 27
+    ExprAnd         進入狀態 28
+    ExprSame        進入狀態 29
+    ExprBigOrSmall  進入狀態 30
+    ExprBitwise     進入狀態 31
+    ExprPlus        進入狀態 32
+    ExprCross       進入狀態 33
+    ExprFrontUnary  進入狀態 34
+    ExprPostfix     進入狀態 35
+    ExprValue       進入狀態 36
+
+
+狀態 123
+
+   80 Expr: ExprLeftSide $@22 SUB_ASSIGN • Expr $@23
+
+    BNT        偏移，並進入狀態 13
+    ADD        偏移，並進入狀態 14
+    SUB        偏移，並進入狀態 15
+    NOT        偏移，並進入狀態 16
+    BOOL_LIT   偏移，並進入狀態 17
+    CHAR_LIT   偏移，並進入狀態 18
+    INT_LIT    偏移，並進入狀態 19
+    FLOAT_LIT  偏移，並進入狀態 20
+    STR_LIT    偏移，並進入狀態 21
+    IDENT      偏移，並進入狀態 45
+    '('        偏移，並進入狀態 46
+
+    Expr            進入狀態 139
+    ExprLeftSide    進入狀態 48
+    ExprRightSide   進入狀態 49
+    ExprDoubleAnd   進入狀態 25
+    ExprOr          進入狀態 26
+    ExprXor         進入狀態 27
+    ExprAnd         進入狀態 28
+    ExprSame        進入狀態 29
+    ExprBigOrSmall  進入狀態 30
+    ExprBitwise     進入狀態 31
+    ExprPlus        進入狀態 32
+    ExprCross       進入狀態 33
+    ExprFrontUnary  進入狀態 34
+    ExprPostfix     進入狀態 35
+    ExprValue       進入狀態 36
+
+
+狀態 124
+
+   83 Expr: ExprLeftSide $@24 MUL_ASSIGN • Expr $@25
+
+    BNT        偏移，並進入狀態 13
+    ADD        偏移，並進入狀態 14
+    SUB        偏移，並進入狀態 15
+    NOT        偏移，並進入狀態 16
+    BOOL_LIT   偏移，並進入狀態 17
+    CHAR_LIT   偏移，並進入狀態 18
+    INT_LIT    偏移，並進入狀態 19
+    FLOAT_LIT  偏移，並進入狀態 20
+    STR_LIT    偏移，並進入狀態 21
+    IDENT      偏移，並進入狀態 45
+    '('        偏移，並進入狀態 46
+
+    Expr            進入狀態 140
+    ExprLeftSide    進入狀態 48
+    ExprRightSide   進入狀態 49
+    ExprDoubleAnd   進入狀態 25
+    ExprOr          進入狀態 26
+    ExprXor         進入狀態 27
+    ExprAnd         進入狀態 28
+    ExprSame        進入狀態 29
+    ExprBigOrSmall  進入狀態 30
+    ExprBitwise     進入狀態 31
+    ExprPlus        進入狀態 32
+    ExprCross       進入狀態 33
+    ExprFrontUnary  進入狀態 34
+    ExprPostfix     進入狀態 35
+    ExprValue       進入狀態 36
+
+
+狀態 125
+
+   86 Expr: ExprLeftSide $@26 DIV_ASSIGN • Expr $@27
+
+    BNT        偏移，並進入狀態 13
+    ADD        偏移，並進入狀態 14
+    SUB        偏移，並進入狀態 15
+    NOT        偏移，並進入狀態 16
+    BOOL_LIT   偏移，並進入狀態 17
+    CHAR_LIT   偏移，並進入狀態 18
+    INT_LIT    偏移，並進入狀態 19
+    FLOAT_LIT  偏移，並進入狀態 20
+    STR_LIT    偏移，並進入狀態 21
+    IDENT      偏移，並進入狀態 45
+    '('        偏移，並進入狀態 46
+
+    Expr            進入狀態 141
+    ExprLeftSide    進入狀態 48
+    ExprRightSide   進入狀態 49
+    ExprDoubleAnd   進入狀態 25
+    ExprOr          進入狀態 26
+    ExprXor         進入狀態 27
+    ExprAnd         進入狀態 28
+    ExprSame        進入狀態 29
+    ExprBigOrSmall  進入狀態 30
+    ExprBitwise     進入狀態 31
+    ExprPlus        進入狀態 32
+    ExprCross       進入狀態 33
+    ExprFrontUnary  進入狀態 34
+    ExprPostfix     進入狀態 35
+    ExprValue       進入狀態 36
+
+
+狀態 126
+
+   89 Expr: ExprLeftSide $@28 REM_ASSIGN • Expr $@29
+
+    BNT        偏移，並進入狀態 13
+    ADD        偏移，並進入狀態 14
+    SUB        偏移，並進入狀態 15
+    NOT        偏移，並進入狀態 16
+    BOOL_LIT   偏移，並進入狀態 17
+    CHAR_LIT   偏移，並進入狀態 18
+    INT_LIT    偏移，並進入狀態 19
+    FLOAT_LIT  偏移，並進入狀態 20
+    STR_LIT    偏移，並進入狀態 21
+    IDENT      偏移，並進入狀態 45
+    '('        偏移，並進入狀態 46
+
+    Expr            進入狀態 142
+    ExprLeftSide    進入狀態 48
+    ExprRightSide   進入狀態 49
+    ExprDoubleAnd   進入狀態 25
+    ExprOr          進入狀態 26
+    ExprXor         進入狀態 27
+    ExprAnd         進入狀態 28
+    ExprSame        進入狀態 29
+    ExprBigOrSmall  進入狀態 30
+    ExprBitwise     進入狀態 31
+    ExprPlus        進入狀態 32
+    ExprCross       進入狀態 33
+    ExprFrontUnary  進入狀態 34
+    ExprPostfix     進入狀態 35
+    ExprValue       進入狀態 36
+
+
+狀態 127
+
+   92 Expr: ExprLeftSide $@30 BAN_ASSIGN • Expr $@31
+
+    BNT        偏移，並進入狀態 13
+    ADD        偏移，並進入狀態 14
+    SUB        偏移，並進入狀態 15
+    NOT        偏移，並進入狀態 16
+    BOOL_LIT   偏移，並進入狀態 17
+    CHAR_LIT   偏移，並進入狀態 18
+    INT_LIT    偏移，並進入狀態 19
+    FLOAT_LIT  偏移，並進入狀態 20
+    STR_LIT    偏移，並進入狀態 21
+    IDENT      偏移，並進入狀態 45
+    '('        偏移，並進入狀態 46
+
+    Expr            進入狀態 143
+    ExprLeftSide    進入狀態 48
+    ExprRightSide   進入狀態 49
+    ExprDoubleAnd   進入狀態 25
+    ExprOr          進入狀態 26
+    ExprXor         進入狀態 27
+    ExprAnd         進入狀態 28
+    ExprSame        進入狀態 29
+    ExprBigOrSmall  進入狀態 30
+    ExprBitwise     進入狀態 31
+    ExprPlus        進入狀態 32
+    ExprCross       進入狀態 33
+    ExprFrontUnary  進入狀態 34
+    ExprPostfix     進入狀態 35
+    ExprValue       進入狀態 36
+
+
+狀態 128
+
+   95 Expr: ExprLeftSide $@32 BOR_ASSIGN • Expr $@33
+
+    BNT        偏移，並進入狀態 13
+    ADD        偏移，並進入狀態 14
+    SUB        偏移，並進入狀態 15
+    NOT        偏移，並進入狀態 16
+    BOOL_LIT   偏移，並進入狀態 17
+    CHAR_LIT   偏移，並進入狀態 18
+    INT_LIT    偏移，並進入狀態 19
+    FLOAT_LIT  偏移，並進入狀態 20
+    STR_LIT    偏移，並進入狀態 21
+    IDENT      偏移，並進入狀態 45
+    '('        偏移，並進入狀態 46
+
+    Expr            進入狀態 144
+    ExprLeftSide    進入狀態 48
+    ExprRightSide   進入狀態 49
+    ExprDoubleAnd   進入狀態 25
+    ExprOr          進入狀態 26
+    ExprXor         進入狀態 27
+    ExprAnd         進入狀態 28
+    ExprSame        進入狀態 29
+    ExprBigOrSmall  進入狀態 30
+    ExprBitwise     進入狀態 31
+    ExprPlus        進入狀態 32
+    ExprCross       進入狀態 33
+    ExprFrontUnary  進入狀態 34
+    ExprPostfix     進入狀態 35
+    ExprValue       進入狀態 36
+
+
+狀態 129
+
+   98 Expr: ExprLeftSide $@34 SHR_ASSIGN • Expr $@35
+
+    BNT        偏移，並進入狀態 13
+    ADD        偏移，並進入狀態 14
+    SUB        偏移，並進入狀態 15
+    NOT        偏移，並進入狀態 16
+    BOOL_LIT   偏移，並進入狀態 17
+    CHAR_LIT   偏移，並進入狀態 18
+    INT_LIT    偏移，並進入狀態 19
+    FLOAT_LIT  偏移，並進入狀態 20
+    STR_LIT    偏移，並進入狀態 21
+    IDENT      偏移，並進入狀態 45
+    '('        偏移，並進入狀態 46
+
+    Expr            進入狀態 145
+    ExprLeftSide    進入狀態 48
+    ExprRightSide   進入狀態 49
+    ExprDoubleAnd   進入狀態 25
+    ExprOr          進入狀態 26
+    ExprXor         進入狀態 27
+    ExprAnd         進入狀態 28
+    ExprSame        進入狀態 29
+    ExprBigOrSmall  進入狀態 30
+    ExprBitwise     進入狀態 31
+    ExprPlus        進入狀態 32
+    ExprCross       進入狀態 33
+    ExprFrontUnary  進入狀態 34
+    ExprPostfix     進入狀態 35
+    ExprValue       進入狀態 36
+
+
+狀態 130
+
+  101 Expr: ExprLeftSide $@36 SHL_ASSIGN • Expr $@37
+
+    BNT        偏移，並進入狀態 13
+    ADD        偏移，並進入狀態 14
+    SUB        偏移，並進入狀態 15
+    NOT        偏移，並進入狀態 16
+    BOOL_LIT   偏移，並進入狀態 17
+    CHAR_LIT   偏移，並進入狀態 18
+    INT_LIT    偏移，並進入狀態 19
+    FLOAT_LIT  偏移，並進入狀態 20
+    STR_LIT    偏移，並進入狀態 21
+    IDENT      偏移，並進入狀態 45
+    '('        偏移，並進入狀態 46
+
+    Expr            進入狀態 146
+    ExprLeftSide    進入狀態 48
+    ExprRightSide   進入狀態 49
+    ExprDoubleAnd   進入狀態 25
+    ExprOr          進入狀態 26
+    ExprXor         進入狀態 27
+    ExprAnd         進入狀態 28
+    ExprSame        進入狀態 29
+    ExprBigOrSmall  進入狀態 30
+    ExprBitwise     進入狀態 31
+    ExprPlus        進入狀態 32
+    ExprCross       進入狀態 33
+    ExprFrontUnary  進入狀態 34
+    ExprPostfix     進入狀態 35
+    ExprValue       進入狀態 36
+
+
+狀態 131
+
+   12 FunctionDefStmt: VARIABLE_T IDENT $@2 '(' $@3 FunctionParameterStmtList ')' • $@4 '{' StmtList '}'
+
+    $default  使用規則 11 以縮減 ($@4)
+
+    $@4  進入狀態 147
+
+
+狀態 132
+
+   17 FunctionParameterStmt: VARIABLE_T IDENT '[' • ']'
+
+    ']'  偏移，並進入狀態 148
+
+
+狀態 133
+
+   13 FunctionParameterStmtList: FunctionParameterStmtList ',' FunctionParameterStmt •
+
+    $default  使用規則 13 以縮減 (FunctionParameterStmtList)
+
+
+狀態 134
+
+   61 ArrayStmt: '[' ArrayVariable ']' •
+
+    $default  使用規則 61 以縮減 (ArrayStmt)
+
+
+狀態 135
+
+   60 ArrayStmt: ArrayStmt $@17 '[' • ArrayVariable ']'
+
+    INT_LIT  偏移，並進入狀態 114
+    IDENT    偏移，並進入狀態 115
+
+    ArrayVariable  進入狀態 149
+
+
+狀態 136
+
+  154 ExprValue: '(' • Expr ')'
+
+    BNT        偏移，並進入狀態 13
+    ADD        偏移，並進入狀態 14
+    SUB        偏移，並進入狀態 15
+    NOT        偏移，並進入狀態 16
+    BOOL_LIT   偏移，並進入狀態 17
+    CHAR_LIT   偏移，並進入狀態 18
+    INT_LIT    偏移，並進入狀態 19
+    FLOAT_LIT  偏移，並進入狀態 20
+    STR_LIT    偏移，並進入狀態 21
+    IDENT      偏移，並進入狀態 45
+    '('        偏移，並進入狀態 46
+
+    Expr            進入狀態 47
+    ExprLeftSide    進入狀態 48
+    ExprRightSide   進入狀態 49
+    ExprDoubleAnd   進入狀態 25
+    ExprOr          進入狀態 26
+    ExprXor         進入狀態 27
+    ExprAnd         進入狀態 28
+    ExprSame        進入狀態 29
+    ExprBigOrSmall  進入狀態 30
+    ExprBitwise     進入狀態 31
+    ExprPlus        進入狀態 32
+    ExprCross       進入狀態 33
+    ExprFrontUnary  進入狀態 34
+    ExprPostfix     進入狀態 35
+    ExprValue       進入狀態 36
+
+
+狀態 137
+
+  140 ExprFrontUnary: '(' VARIABLE_T ')' $@39 ExprPostfix •
+
+    $default  使用規則 140 以縮減 (ExprFrontUnary)
+
+
+狀態 138
+
+   77 Expr: ExprLeftSide $@20 ADD_ASSIGN Expr • $@21
+
+    $default  使用規則 76 以縮減 ($@21)
+
+    $@21  進入狀態 150
+
+
+狀態 139
+
+   80 Expr: ExprLeftSide $@22 SUB_ASSIGN Expr • $@23
+
+    $default  使用規則 79 以縮減 ($@23)
+
+    $@23  進入狀態 151
+
+
+狀態 140
+
+   83 Expr: ExprLeftSide $@24 MUL_ASSIGN Expr • $@25
+
+    $default  使用規則 82 以縮減 ($@25)
+
+    $@25  進入狀態 152
+
+
+狀態 141
+
+   86 Expr: ExprLeftSide $@26 DIV_ASSIGN Expr • $@27
+
+    $default  使用規則 85 以縮減 ($@27)
+
+    $@27  進入狀態 153
+
+
+狀態 142
+
+   89 Expr: ExprLeftSide $@28 REM_ASSIGN Expr • $@29
+
+    $default  使用規則 88 以縮減 ($@29)
+
+    $@29  進入狀態 154
+
+
+狀態 143
+
+   92 Expr: ExprLeftSide $@30 BAN_ASSIGN Expr • $@31
+
+    $default  使用規則 91 以縮減 ($@31)
+
+    $@31  進入狀態 155
+
+
+狀態 144
+
+   95 Expr: ExprLeftSide $@32 BOR_ASSIGN Expr • $@33
+
+    $default  使用規則 94 以縮減 ($@33)
+
+    $@33  進入狀態 156
+
+
+狀態 145
+
+   98 Expr: ExprLeftSide $@34 SHR_ASSIGN Expr • $@35
+
+    $default  使用規則 97 以縮減 ($@35)
+
+    $@35  進入狀態 157
+
+
+狀態 146
+
+  101 Expr: ExprLeftSide $@36 SHL_ASSIGN Expr • $@37
+
+    $default  使用規則 100 以縮減 ($@37)
+
+    $@37  進入狀態 158
+
+
+狀態 147
+
+   12 FunctionDefStmt: VARIABLE_T IDENT $@2 '(' $@3 FunctionParameterStmtList ')' $@4 • '{' StmtList '}'
+
+    '{'  偏移，並進入狀態 159
+
+
+狀態 148
+
+   17 FunctionParameterStmt: VARIABLE_T IDENT '[' ']' •
+
+    $default  使用規則 17 以縮減 (FunctionParameterStmt)
+
+
+狀態 149
+
+   60 ArrayStmt: ArrayStmt $@17 '[' ArrayVariable • ']'
+
+    ']'  偏移，並進入狀態 160
+
+
+狀態 150
+
+   77 Expr: ExprLeftSide $@20 ADD_ASSIGN Expr $@21 •
+
+    $default  使用規則 77 以縮減 (Expr)
+
+
+狀態 151
+
+   80 Expr: ExprLeftSide $@22 SUB_ASSIGN Expr $@23 •
+
+    $default  使用規則 80 以縮減 (Expr)
+
+
+狀態 152
+
+   83 Expr: ExprLeftSide $@24 MUL_ASSIGN Expr $@25 •
+
+    $default  使用規則 83 以縮減 (Expr)
+
+
+狀態 153
+
+   86 Expr: ExprLeftSide $@26 DIV_ASSIGN Expr $@27 •
+
+    $default  使用規則 86 以縮減 (Expr)
+
+
+狀態 154
+
+   89 Expr: ExprLeftSide $@28 REM_ASSIGN Expr $@29 •
+
+    $default  使用規則 89 以縮減 (Expr)
+
+
+狀態 155
+
+   92 Expr: ExprLeftSide $@30 BAN_ASSIGN Expr $@31 •
+
+    $default  使用規則 92 以縮減 (Expr)
+
+
+狀態 156
+
+   95 Expr: ExprLeftSide $@32 BOR_ASSIGN Expr $@33 •
+
+    $default  使用規則 95 以縮減 (Expr)
+
+
+狀態 157
+
+   98 Expr: ExprLeftSide $@34 SHR_ASSIGN Expr $@35 •
+
+    $default  使用規則 98 以縮減 (Expr)
+
+
+狀態 158
+
+  101 Expr: ExprLeftSide $@36 SHL_ASSIGN Expr $@37 •
+
+    $default  使用規則 101 以縮減 (Expr)
+
+
+狀態 159
+
+   12 FunctionDefStmt: VARIABLE_T IDENT $@2 '(' $@3 FunctionParameterStmtList ')' $@4 '{' • StmtList '}'
+
+    COUT        偏移，並進入狀態 161
+    BNT         偏移，並進入狀態 13
+    ADD         偏移，並進入狀態 14
+    SUB         偏移，並進入狀態 15
+    NOT         偏移，並進入狀態 16
+    IF          偏移，並進入狀態 162
+    FOR         偏移，並進入狀態 163
+    WHILE       偏移，並進入狀態 164
+    RETURN      偏移，並進入狀態 165
+    BREAK       偏移，並進入狀態 166
+    CONTINUE    偏移，並進入狀態 167
+    VARIABLE_T  偏移，並進入狀態 168
+    BOOL_LIT    偏移，並進入狀態 17
+    CHAR_LIT    偏移，並進入狀態 18
+    INT_LIT     偏移，並進入狀態 19
+    FLOAT_LIT   偏移，並進入狀態 20
+    STR_LIT     偏移，並進入狀態 21
+    IDENT       偏移，並進入狀態 45
+    ';'         偏移，並進入狀態 169
+    '('         偏移，並進入狀態 46
+
+    StmtList           進入狀態 170
+    Stmt               進入狀態 171
+    RegularDefineStmt  進入狀態 172
+    Expr               進入狀態 173
+    ExprLeftSide       進入狀態 48
+    ExprRightSide      進入狀態 49
+    ExprDoubleAnd      進入狀態 25
+    ExprOr             進入狀態 26
+    ExprXor            進入狀態 27
+    ExprAnd            進入狀態 28
+    ExprSame           進入狀態 29
+    ExprBigOrSmall     進入狀態 30
+    ExprBitwise        進入狀態 31
+    ExprPlus           進入狀態 32
+    ExprCross          進入狀態 33
+    ExprFrontUnary     進入狀態 34
+    ExprPostfix        進入狀態 35
+    ExprValue          進入狀態 36
+
+
+狀態 160
+
+   60 ArrayStmt: ArrayStmt $@17 '[' ArrayVariable ']' •
+
+    $default  使用規則 60 以縮減 (ArrayStmt)
+
+
+狀態 161
+
+   23 Stmt: COUT • CoutParmListStmt ';'
+
+    SHL  偏移，並進入狀態 174
+
+    CoutParmListStmt  進入狀態 175
+
+
+狀態 162
+
+   26 Stmt: IF • '(' Expr ')' $@5 IfElseStmt $@6 Elsestmt
+
+    '('  偏移，並進入狀態 176
+
+
+狀態 163
+
+   32 Stmt: FOR • $@10 '(' ForStmt ')' '{' StmtList '}'
+
+    $default  使用規則 31 以縮減 ($@10)
+
+    $@10  進入狀態 177
+
+
+狀態 164
+
+   30 Stmt: WHILE • $@7 '(' Expr $@8 ')' $@9 '{' StmtList '}'
+
+    $default  使用規則 27 以縮減 ($@7)
+
+    $@7  進入狀態 178
+
+
+狀態 165
+
+   35 Stmt: RETURN • ';'
+   36     | RETURN • Expr ';'
+
+    BNT        偏移，並進入狀態 13
+    ADD        偏移，並進入狀態 14
+    SUB        偏移，並進入狀態 15
+    NOT        偏移，並進入狀態 16
+    BOOL_LIT   偏移，並進入狀態 17
+    CHAR_LIT   偏移，並進入狀態 18
+    INT_LIT    偏移，並進入狀態 19
+    FLOAT_LIT  偏移，並進入狀態 20
+    STR_LIT    偏移，並進入狀態 21
+    IDENT      偏移，並進入狀態 45
+    ';'        偏移，並進入狀態 179
+    '('        偏移，並進入狀態 46
+
+    Expr            進入狀態 180
+    ExprLeftSide    進入狀態 48
+    ExprRightSide   進入狀態 49
+    ExprDoubleAnd   進入狀態 25
+    ExprOr          進入狀態 26
+    ExprXor         進入狀態 27
+    ExprAnd         進入狀態 28
+    ExprSame        進入狀態 29
+    ExprBigOrSmall  進入狀態 30
+    ExprBitwise     進入狀態 31
+    ExprPlus        進入狀態 32
+    ExprCross       進入狀態 33
+    ExprFrontUnary  進入狀態 34
+    ExprPostfix     進入狀態 35
+    ExprValue       進入狀態 36
+
+
+狀態 166
+
+   33 Stmt: BREAK • ';'
+
+    ';'  偏移，並進入狀態 181
+
+
+狀態 167
+
+   34 Stmt: CONTINUE • ';'
+
+    ';'  偏移，並進入狀態 182
+
+
+狀態 168
+
+   39 RegularDefineStmt: VARIABLE_T • StmtParameter
+   40                  | VARIABLE_T • IDENT ArrayDefStmt
+   42                  | VARIABLE_T • IDENT ArrayDefStmt $@11 VAL_ASSIGN ArrayExpression
+
+    IDENT  偏移，並進入狀態 183
+
+    StmtParameter      進入狀態 184
+    StmtParameterList  進入狀態 185
+
+
+狀態 169
+
+   21 Stmt: ';' •
+
+    $default  使用規則 21 以縮減 (Stmt)
+
+
+狀態 170
+
+   12 FunctionDefStmt: VARIABLE_T IDENT $@2 '(' $@3 FunctionParameterStmtList ')' $@4 '{' StmtList • '}'
+   19 StmtList: StmtList • Stmt
+
+    COUT        偏移，並進入狀態 161
+    BNT         偏移，並進入狀態 13
+    ADD         偏移，並進入狀態 14
+    SUB         偏移，並進入狀態 15
+    NOT         偏移，並進入狀態 16
+    IF          偏移，並進入狀態 162
+    FOR         偏移，並進入狀態 163
+    WHILE       偏移，並進入狀態 164
+    RETURN      偏移，並進入狀態 165
+    BREAK       偏移，並進入狀態 166
+    CONTINUE    偏移，並進入狀態 167
+    VARIABLE_T  偏移，並進入狀態 168
+    BOOL_LIT    偏移，並進入狀態 17
+    CHAR_LIT    偏移，並進入狀態 18
+    INT_LIT     偏移，並進入狀態 19
+    FLOAT_LIT   偏移，並進入狀態 20
+    STR_LIT     偏移，並進入狀態 21
+    IDENT       偏移，並進入狀態 45
+    ';'         偏移，並進入狀態 169
+    '('         偏移，並進入狀態 46
+    '}'         偏移，並進入狀態 186
+
+    Stmt               進入狀態 187
+    RegularDefineStmt  進入狀態 172
+    Expr               進入狀態 173
+    ExprLeftSide       進入狀態 48
+    ExprRightSide      進入狀態 49
+    ExprDoubleAnd      進入狀態 25
+    ExprOr             進入狀態 26
+    ExprXor            進入狀態 27
+    ExprAnd            進入狀態 28
+    ExprSame           進入狀態 29
+    ExprBigOrSmall     進入狀態 30
+    ExprBitwise        進入狀態 31
+    ExprPlus           進入狀態 32
+    ExprCross          進入狀態 33
+    ExprFrontUnary     進入狀態 34
+    ExprPostfix        進入狀態 35
+    ExprValue          進入狀態 36
+
+
+狀態 171
+
+   20 StmtList: Stmt •
+
+    $default  使用規則 20 以縮減 (StmtList)
+
+
+狀態 172
+
+   22 Stmt: RegularDefineStmt • ';'
+
+    ';'  偏移，並進入狀態 188
+
+
+狀態 173
+
+   43 RegularDefineStmt: Expr •
+
+    $default  使用規則 43 以縮減 (RegularDefineStmt)
+
+
+狀態 174
+
+   47 CoutParmListStmt: SHL • $@13 ExprPlus
+
+    $default  使用規則 46 以縮減 ($@13)
+
+    $@13  進入狀態 189
+
+
+狀態 175
+
+   23 Stmt: COUT CoutParmListStmt • ';'
+   45 CoutParmListStmt: CoutParmListStmt • $@12 SHL ExprPlus
+
+    ';'  偏移，並進入狀態 190
+
+    $default  使用規則 44 以縮減 ($@12)
+
+    $@12  進入狀態 191
+
+
+狀態 176
+
+   26 Stmt: IF '(' • Expr ')' $@5 IfElseStmt $@6 Elsestmt
+
+    BNT        偏移，並進入狀態 13
+    ADD        偏移，並進入狀態 14
+    SUB        偏移，並進入狀態 15
+    NOT        偏移，並進入狀態 16
+    BOOL_LIT   偏移，並進入狀態 17
+    CHAR_LIT   偏移，並進入狀態 18
+    INT_LIT    偏移，並進入狀態 19
+    FLOAT_LIT  偏移，並進入狀態 20
+    STR_LIT    偏移，並進入狀態 21
+    IDENT      偏移，並進入狀態 45
+    '('        偏移，並進入狀態 46
+
+    Expr            進入狀態 192
+    ExprLeftSide    進入狀態 48
+    ExprRightSide   進入狀態 49
+    ExprDoubleAnd   進入狀態 25
+    ExprOr          進入狀態 26
+    ExprXor         進入狀態 27
+    ExprAnd         進入狀態 28
+    ExprSame        進入狀態 29
+    ExprBigOrSmall  進入狀態 30
+    ExprBitwise     進入狀態 31
+    ExprPlus        進入狀態 32
+    ExprCross       進入狀態 33
+    ExprFrontUnary  進入狀態 34
+    ExprPostfix     進入狀態 35
+    ExprValue       進入狀態 36
+
+
+狀態 177
+
+   32 Stmt: FOR $@10 • '(' ForStmt ')' '{' StmtList '}'
+
+    '('  偏移，並進入狀態 193
+
+
+狀態 178
+
+   30 Stmt: WHILE $@7 • '(' Expr $@8 ')' $@9 '{' StmtList '}'
+
+    '('  偏移，並進入狀態 194
+
+
+狀態 179
+
+   35 Stmt: RETURN ';' •
+
+    $default  使用規則 35 以縮減 (Stmt)
+
+
+狀態 180
+
+   36 Stmt: RETURN Expr • ';'
+
+    ';'  偏移，並進入狀態 195
+
+
+狀態 181
+
+   33 Stmt: BREAK ';' •
+
+    $default  使用規則 33 以縮減 (Stmt)
+
+
+狀態 182
+
+   34 Stmt: CONTINUE ';' •
+
+    $default  使用規則 34 以縮減 (Stmt)
+
+
+狀態 183
+
+   40 RegularDefineStmt: VARIABLE_T IDENT • ArrayDefStmt
+   42                  | VARIABLE_T IDENT • ArrayDefStmt $@11 VAL_ASSIGN ArrayExpression
+   72 StmtParameterList: IDENT • VAL_ASSIGN ExprRightSide
+   73                  | IDENT •
+
+    VAL_ASSIGN  偏移，並進入狀態 196
+    '['         偏移，並進入狀態 197
+
+    $default  使用規則 73 以縮減 (StmtParameterList)
+
+    ArrayDefStmt  進入狀態 198
+    ArrayStmt     進入狀態 199
+
+
+狀態 184
+
+   39 RegularDefineStmt: VARIABLE_T StmtParameter •
+   70 StmtParameter: StmtParameter • ',' StmtParameterList
+
+    ','  偏移，並進入狀態 200
+
+    $default  使用規則 39 以縮減 (RegularDefineStmt)
+
+
+狀態 185
+
+   71 StmtParameter: StmtParameterList •
+
+    $default  使用規則 71 以縮減 (StmtParameter)
+
+
+狀態 186
+
+   12 FunctionDefStmt: VARIABLE_T IDENT $@2 '(' $@3 FunctionParameterStmtList ')' $@4 '{' StmtList '}' •
+
+    $default  使用規則 12 以縮減 (FunctionDefStmt)
+
+
+狀態 187
+
+   19 StmtList: StmtList Stmt •
+
+    $default  使用規則 19 以縮減 (StmtList)
+
+
+狀態 188
+
+   22 Stmt: RegularDefineStmt ';' •
+
+    $default  使用規則 22 以縮減 (Stmt)
+
+
+狀態 189
+
+   47 CoutParmListStmt: SHL $@13 • ExprPlus
+
+    BNT        偏移，並進入狀態 13
+    ADD        偏移，並進入狀態 14
+    SUB        偏移，並進入狀態 15
+    NOT        偏移，並進入狀態 16
+    BOOL_LIT   偏移，並進入狀態 17
+    CHAR_LIT   偏移，並進入狀態 18
+    INT_LIT    偏移，並進入狀態 19
+    FLOAT_LIT  偏移，並進入狀態 20
+    STR_LIT    偏移，並進入狀態 21
+    IDENT      偏移，並進入狀態 22
+    '('        偏移，並進入狀態 23
+
+    ExprPlus        進入狀態 201
+    ExprCross       進入狀態 33
+    ExprFrontUnary  進入狀態 34
+    ExprPostfix     進入狀態 35
+    ExprValue       進入狀態 36
+
+
+狀態 190
+
+   23 Stmt: COUT CoutParmListStmt ';' •
+
+    $default  使用規則 23 以縮減 (Stmt)
+
+
+狀態 191
+
+   45 CoutParmListStmt: CoutParmListStmt $@12 • SHL ExprPlus
+
+    SHL  偏移，並進入狀態 202
+
+
+狀態 192
+
+   26 Stmt: IF '(' Expr • ')' $@5 IfElseStmt $@6 Elsestmt
+
+    ')'  偏移，並進入狀態 203
+
+
+狀態 193
+
+   32 Stmt: FOR $@10 '(' • ForStmt ')' '{' StmtList '}'
+
+    BNT         偏移，並進入狀態 13
+    ADD         偏移，並進入狀態 14
+    SUB         偏移，並進入狀態 15
+    NOT         偏移，並進入狀態 16
+    VARIABLE_T  偏移，並進入狀態 168
+    BOOL_LIT    偏移，並進入狀態 17
+    CHAR_LIT    偏移，並進入狀態 18
+    INT_LIT     偏移，並進入狀態 19
+    FLOAT_LIT   偏移，並進入狀態 20
+    STR_LIT     偏移，並進入狀態 21
+    IDENT       偏移，並進入狀態 45
+    '('         偏移，並進入狀態 46
+
+    $default  使用規則 56 以縮減 (ForInit)
+
+    RegularDefineStmt  進入狀態 204
+    ForStmt            進入狀態 205
+    ForInit            進入狀態 206
+    Expr               進入狀態 173
+    ExprLeftSide       進入狀態 48
+    ExprRightSide      進入狀態 49
+    ExprDoubleAnd      進入狀態 25
+    ExprOr             進入狀態 26
+    ExprXor            進入狀態 27
+    ExprAnd            進入狀態 28
+    ExprSame           進入狀態 29
+    ExprBigOrSmall     進入狀態 30
+    ExprBitwise        進入狀態 31
+    ExprPlus           進入狀態 32
+    ExprCross          進入狀態 33
+    ExprFrontUnary     進入狀態 34
+    ExprPostfix        進入狀態 35
+    ExprValue          進入狀態 36
+
+
+狀態 194
+
+   30 Stmt: WHILE $@7 '(' • Expr $@8 ')' $@9 '{' StmtList '}'
+
+    BNT        偏移，並進入狀態 13
+    ADD        偏移，並進入狀態 14
+    SUB        偏移，並進入狀態 15
+    NOT        偏移，並進入狀態 16
+    BOOL_LIT   偏移，並進入狀態 17
+    CHAR_LIT   偏移，並進入狀態 18
+    INT_LIT    偏移，並進入狀態 19
+    FLOAT_LIT  偏移，並進入狀態 20
+    STR_LIT    偏移，並進入狀態 21
+    IDENT      偏移，並進入狀態 45
+    '('        偏移，並進入狀態 46
+
+    Expr            進入狀態 207
+    ExprLeftSide    進入狀態 48
+    ExprRightSide   進入狀態 49
+    ExprDoubleAnd   進入狀態 25
+    ExprOr          進入狀態 26
+    ExprXor         進入狀態 27
+    ExprAnd         進入狀態 28
+    ExprSame        進入狀態 29
+    ExprBigOrSmall  進入狀態 30
+    ExprBitwise     進入狀態 31
+    ExprPlus        進入狀態 32
+    ExprCross       進入狀態 33
+    ExprFrontUnary  進入狀態 34
+    ExprPostfix     進入狀態 35
+    ExprValue       進入狀態 36
+
+
+狀態 195
+
+   36 Stmt: RETURN Expr ';' •
+
+    $default  使用規則 36 以縮減 (Stmt)
+
+
+狀態 196
+
+   72 StmtParameterList: IDENT VAL_ASSIGN • ExprRightSide
+
+    BNT        偏移，並進入狀態 13
+    ADD        偏移，並進入狀態 14
+    SUB        偏移，並進入狀態 15
+    NOT        偏移，並進入狀態 16
+    BOOL_LIT   偏移，並進入狀態 17
+    CHAR_LIT   偏移，並進入狀態 18
+    INT_LIT    偏移，並進入狀態 19
+    FLOAT_LIT  偏移，並進入狀態 20
+    STR_LIT    偏移，並進入狀態 21
+    IDENT      偏移，並進入狀態 22
+    '('        偏移，並進入狀態 23
+
+    ExprRightSide   進入狀態 208
+    ExprDoubleAnd   進入狀態 25
+    ExprOr          進入狀態 26
+    ExprXor         進入狀態 27
+    ExprAnd         進入狀態 28
+    ExprSame        進入狀態 29
+    ExprBigOrSmall  進入狀態 30
+    ExprBitwise     進入狀態 31
+    ExprPlus        進入狀態 32
+    ExprCross       進入狀態 33
+    ExprFrontUnary  進入狀態 34
+    ExprPostfix     進入狀態 35
+    ExprValue       進入狀態 36
+
+
+狀態 197
+
+   58 ArrayDefStmt: '[' • ArrayVariable ']'
+   61 ArrayStmt: '[' • ArrayVariable ']'
+
+    INT_LIT  偏移，並進入狀態 114
+    IDENT    偏移，並進入狀態 115
+
+    ArrayVariable  進入狀態 209
+
+
+狀態 198
+
+   40 RegularDefineStmt: VARIABLE_T IDENT ArrayDefStmt •
+   42                  | VARIABLE_T IDENT ArrayDefStmt • $@11 VAL_ASSIGN ArrayExpression
+
+    VAL_ASSIGN  使用規則 41 以縮減 ($@11)
+    $default    使用規則 40 以縮減 (RegularDefineStmt)
+
+    $@11  進入狀態 210
+
+
+狀態 199
+
+   57 ArrayDefStmt: ArrayStmt • '[' ArrayVariable ']'
+   60 ArrayStmt: ArrayStmt • $@17 '[' ArrayVariable ']'
+
+    '['  偏移，並進入狀態 211
+
+    '['  [使用規則 59 以縮減 ($@17)]
+
+    $@17  進入狀態 117
+
+
+狀態 200
+
+   70 StmtParameter: StmtParameter ',' • StmtParameterList
+
+    IDENT  偏移，並進入狀態 212
+
+    StmtParameterList  進入狀態 213
+
+
+狀態 201
+
+   47 CoutParmListStmt: SHL $@13 ExprPlus •
+  128 ExprPlus: ExprPlus • ADD ExprCross
+  129         | ExprPlus • SUB ExprCross
+
+    ADD  偏移，並進入狀態 64
+    SUB  偏移，並進入狀態 65
+
+    $default  使用規則 47 以縮減 (CoutParmListStmt)
+
+
+狀態 202
+
+   45 CoutParmListStmt: CoutParmListStmt $@12 SHL • ExprPlus
+
+    BNT        偏移，並進入狀態 13
+    ADD        偏移，並進入狀態 14
+    SUB        偏移，並進入狀態 15
+    NOT        偏移，並進入狀態 16
+    BOOL_LIT   偏移，並進入狀態 17
+    CHAR_LIT   偏移，並進入狀態 18
+    INT_LIT    偏移，並進入狀態 19
+    FLOAT_LIT  偏移，並進入狀態 20
+    STR_LIT    偏移，並進入狀態 21
+    IDENT      偏移，並進入狀態 22
+    '('        偏移，並進入狀態 23
+
+    ExprPlus        進入狀態 214
+    ExprCross       進入狀態 33
+    ExprFrontUnary  進入狀態 34
+    ExprPostfix     進入狀態 35
+    ExprValue       進入狀態 36
+
+
+狀態 203
+
+   26 Stmt: IF '(' Expr ')' • $@5 IfElseStmt $@6 Elsestmt
+
+    $default  使用規則 24 以縮減 ($@5)
+
+    $@5  進入狀態 215
+
+
+狀態 204
+
+   54 ForStmt: RegularDefineStmt • ':' Expr
+   55 ForInit: RegularDefineStmt •
+
+    ':'  偏移，並進入狀態 216
+
+    $default  使用規則 55 以縮減 (ForInit)
+
+
+狀態 205
+
+   32 Stmt: FOR $@10 '(' ForStmt • ')' '{' StmtList '}'
+
+    ')'  偏移，並進入狀態 217
+
+
+狀態 206
+
+   53 ForStmt: ForInit • $@15 ';' Expr ';' $@16 Expr
+
+    $default  使用規則 51 以縮減 ($@15)
+
+    $@15  進入狀態 218
+
+
+狀態 207
+
+   30 Stmt: WHILE $@7 '(' Expr • $@8 ')' $@9 '{' StmtList '}'
+
+    $default  使用規則 28 以縮減 ($@8)
+
+    $@8  進入狀態 219
+
+
+狀態 208
+
+   72 StmtParameterList: IDENT VAL_ASSIGN ExprRightSide •
+  107 ExprRightSide: ExprRightSide • LOR ExprDoubleAnd
+
+    LOR  偏移，並進入狀態 50
+
+    $default  使用規則 72 以縮減 (StmtParameterList)
+
+
+狀態 209
+
+   58 ArrayDefStmt: '[' ArrayVariable • ']'
+   61 ArrayStmt: '[' ArrayVariable • ']'
+
+    ']'  偏移，並進入狀態 220
+
+
+狀態 210
+
+   42 RegularDefineStmt: VARIABLE_T IDENT ArrayDefStmt $@11 • VAL_ASSIGN ArrayExpression
+
+    VAL_ASSIGN  偏移，並進入狀態 221
+
+
+狀態 211
+
+   57 ArrayDefStmt: ArrayStmt '[' • ArrayVariable ']'
+
+    INT_LIT  偏移，並進入狀態 114
+    IDENT    偏移，並進入狀態 115
+
+    ArrayVariable  進入狀態 222
+
+
+狀態 212
+
+   72 StmtParameterList: IDENT • VAL_ASSIGN ExprRightSide
+   73                  | IDENT •
+
+    VAL_ASSIGN  偏移，並進入狀態 196
+
+    $default  使用規則 73 以縮減 (StmtParameterList)
+
+
+狀態 213
+
+   70 StmtParameter: StmtParameter ',' StmtParameterList •
+
+    $default  使用規則 70 以縮減 (StmtParameter)
+
+
+狀態 214
+
+   45 CoutParmListStmt: CoutParmListStmt $@12 SHL ExprPlus •
+  128 ExprPlus: ExprPlus • ADD ExprCross
+  129         | ExprPlus • SUB ExprCross
+
+    ADD  偏移，並進入狀態 64
+    SUB  偏移，並進入狀態 65
+
+    $default  使用規則 45 以縮減 (CoutParmListStmt)
+
+
+狀態 215
+
+   26 Stmt: IF '(' Expr ')' $@5 • IfElseStmt $@6 Elsestmt
+
+    COUT        偏移，並進入狀態 161
+    BNT         偏移，並進入狀態 13
+    ADD         偏移，並進入狀態 14
+    SUB         偏移，並進入狀態 15
+    NOT         偏移，並進入狀態 16
+    IF          偏移，並進入狀態 162
+    FOR         偏移，並進入狀態 163
+    WHILE       偏移，並進入狀態 164
+    RETURN      偏移，並進入狀態 165
+    BREAK       偏移，並進入狀態 166
+    CONTINUE    偏移，並進入狀態 167
+    VARIABLE_T  偏移，並進入狀態 168
+    BOOL_LIT    偏移，並進入狀態 17
+    CHAR_LIT    偏移，並進入狀態 18
+    INT_LIT     偏移，並進入狀態 19
+    FLOAT_LIT   偏移，並進入狀態 20
+    STR_LIT     偏移，並進入狀態 21
+    IDENT       偏移，並進入狀態 45
+    ';'         偏移，並進入狀態 169
+    '('         偏移，並進入狀態 46
+
+    $default  使用規則 49 以縮減 ($@14)
+
+    Stmt               進入狀態 223
+    RegularDefineStmt  進入狀態 172
+    IfElseStmt         進入狀態 224
+    $@14               進入狀態 225
+    Expr               進入狀態 173
+    ExprLeftSide       進入狀態 48
+    ExprRightSide      進入狀態 49
+    ExprDoubleAnd      進入狀態 25
+    ExprOr             進入狀態 26
+    ExprXor            進入狀態 27
+    ExprAnd            進入狀態 28
+    ExprSame           進入狀態 29
+    ExprBigOrSmall     進入狀態 30
+    ExprBitwise        進入狀態 31
+    ExprPlus           進入狀態 32
+    ExprCross          進入狀態 33
+    ExprFrontUnary     進入狀態 34
+    ExprPostfix        進入狀態 35
+    ExprValue          進入狀態 36
+
+
+狀態 216
+
+   54 ForStmt: RegularDefineStmt ':' • Expr
+
+    BNT        偏移，並進入狀態 13
+    ADD        偏移，並進入狀態 14
+    SUB        偏移，並進入狀態 15
+    NOT        偏移，並進入狀態 16
+    BOOL_LIT   偏移，並進入狀態 17
+    CHAR_LIT   偏移，並進入狀態 18
+    INT_LIT    偏移，並進入狀態 19
+    FLOAT_LIT  偏移，並進入狀態 20
+    STR_LIT    偏移，並進入狀態 21
+    IDENT      偏移，並進入狀態 45
+    '('        偏移，並進入狀態 46
+
+    Expr            進入狀態 226
+    ExprLeftSide    進入狀態 48
+    ExprRightSide   進入狀態 49
+    ExprDoubleAnd   進入狀態 25
+    ExprOr          進入狀態 26
+    ExprXor         進入狀態 27
+    ExprAnd         進入狀態 28
+    ExprSame        進入狀態 29
+    ExprBigOrSmall  進入狀態 30
+    ExprBitwise     進入狀態 31
+    ExprPlus        進入狀態 32
+    ExprCross       進入狀態 33
+    ExprFrontUnary  進入狀態 34
+    ExprPostfix     進入狀態 35
+    ExprValue       進入狀態 36
+
+
+狀態 217
+
+   32 Stmt: FOR $@10 '(' ForStmt ')' • '{' StmtList '}'
+
+    '{'  偏移，並進入狀態 227
+
+
+狀態 218
+
+   53 ForStmt: ForInit $@15 • ';' Expr ';' $@16 Expr
+
+    ';'  偏移，並進入狀態 228
+
+
+狀態 219
+
+   30 Stmt: WHILE $@7 '(' Expr $@8 • ')' $@9 '{' StmtList '}'
+
+    ')'  偏移，並進入狀態 229
+
+
+狀態 220
+
+   58 ArrayDefStmt: '[' ArrayVariable ']' •
+   61 ArrayStmt: '[' ArrayVariable ']' •
+
+    '['       使用規則 61 以縮減 (ArrayStmt)
+    $default  使用規則 58 以縮減 (ArrayDefStmt)
+
+
+狀態 221
+
+   42 RegularDefineStmt: VARIABLE_T IDENT ArrayDefStmt $@11 VAL_ASSIGN • ArrayExpression
+
+    '{'  偏移，並進入狀態 230
+
+    ArrayExpression  進入狀態 231
+
+
+狀態 222
+
+   57 ArrayDefStmt: ArrayStmt '[' ArrayVariable • ']'
+
+    ']'  偏移，並進入狀態 232
+
+
+狀態 223
+
+   48 IfElseStmt: Stmt •
+
+    $default  使用規則 48 以縮減 (IfElseStmt)
+
+
+狀態 224
+
+   26 Stmt: IF '(' Expr ')' $@5 IfElseStmt • $@6 Elsestmt
+
+    $default  使用規則 25 以縮減 ($@6)
+
+    $@6  進入狀態 233
+
+
+狀態 225
+
+   50 IfElseStmt: $@14 • '{' StmtList '}'
+
+    '{'  偏移，並進入狀態 234
+
+
+狀態 226
+
+   54 ForStmt: RegularDefineStmt ':' Expr •
+
+    $default  使用規則 54 以縮減 (ForStmt)
+
+
+狀態 227
+
+   32 Stmt: FOR $@10 '(' ForStmt ')' '{' • StmtList '}'
+
+    COUT        偏移，並進入狀態 161
+    BNT         偏移，並進入狀態 13
+    ADD         偏移，並進入狀態 14
+    SUB         偏移，並進入狀態 15
+    NOT         偏移，並進入狀態 16
+    IF          偏移，並進入狀態 162
+    FOR         偏移，並進入狀態 163
+    WHILE       偏移，並進入狀態 164
+    RETURN      偏移，並進入狀態 165
+    BREAK       偏移，並進入狀態 166
+    CONTINUE    偏移，並進入狀態 167
+    VARIABLE_T  偏移，並進入狀態 168
+    BOOL_LIT    偏移，並進入狀態 17
+    CHAR_LIT    偏移，並進入狀態 18
+    INT_LIT     偏移，並進入狀態 19
+    FLOAT_LIT   偏移，並進入狀態 20
+    STR_LIT     偏移，並進入狀態 21
+    IDENT       偏移，並進入狀態 45
+    ';'         偏移，並進入狀態 169
+    '('         偏移，並進入狀態 46
+
+    StmtList           進入狀態 235
+    Stmt               進入狀態 171
+    RegularDefineStmt  進入狀態 172
+    Expr               進入狀態 173
+    ExprLeftSide       進入狀態 48
+    ExprRightSide      進入狀態 49
+    ExprDoubleAnd      進入狀態 25
+    ExprOr             進入狀態 26
+    ExprXor            進入狀態 27
+    ExprAnd            進入狀態 28
+    ExprSame           進入狀態 29
+    ExprBigOrSmall     進入狀態 30
+    ExprBitwise        進入狀態 31
+    ExprPlus           進入狀態 32
+    ExprCross          進入狀態 33
+    ExprFrontUnary     進入狀態 34
+    ExprPostfix        進入狀態 35
+    ExprValue          進入狀態 36
+
+
+狀態 228
+
+   53 ForStmt: ForInit $@15 ';' • Expr ';' $@16 Expr
+
+    BNT        偏移，並進入狀態 13
+    ADD        偏移，並進入狀態 14
+    SUB        偏移，並進入狀態 15
+    NOT        偏移，並進入狀態 16
+    BOOL_LIT   偏移，並進入狀態 17
+    CHAR_LIT   偏移，並進入狀態 18
+    INT_LIT    偏移，並進入狀態 19
+    FLOAT_LIT  偏移，並進入狀態 20
+    STR_LIT    偏移，並進入狀態 21
+    IDENT      偏移，並進入狀態 45
+    '('        偏移，並進入狀態 46
+
+    Expr            進入狀態 236
+    ExprLeftSide    進入狀態 48
+    ExprRightSide   進入狀態 49
+    ExprDoubleAnd   進入狀態 25
+    ExprOr          進入狀態 26
+    ExprXor         進入狀態 27
+    ExprAnd         進入狀態 28
+    ExprSame        進入狀態 29
+    ExprBigOrSmall  進入狀態 30
+    ExprBitwise     進入狀態 31
+    ExprPlus        進入狀態 32
+    ExprCross       進入狀態 33
+    ExprFrontUnary  進入狀態 34
+    ExprPostfix     進入狀態 35
+    ExprValue       進入狀態 36
+
+
+狀態 229
+
+   30 Stmt: WHILE $@7 '(' Expr $@8 ')' • $@9 '{' StmtList '}'
+
+    $default  使用規則 29 以縮減 ($@9)
+
+    $@9  進入狀態 237
+
+
+狀態 230
+
+   64 ArrayExpression: '{' • ArrayInsideExpression '}'
+
+    '}'       使用規則 69 以縮減 (ArrayInsideExpression)
+    ','       使用規則 69 以縮減 (ArrayInsideExpression)
+    $default  使用規則 67 以縮減 ($@19)
+
+    ArrayInsideExpression  進入狀態 238
+    $@19                   進入狀態 239
+
+
+狀態 231
+
+   42 RegularDefineStmt: VARIABLE_T IDENT ArrayDefStmt $@11 VAL_ASSIGN ArrayExpression •
+
+    $default  使用規則 42 以縮減 (RegularDefineStmt)
+
+
+狀態 232
+
+   57 ArrayDefStmt: ArrayStmt '[' ArrayVariable ']' •
+
+    $default  使用規則 57 以縮減 (ArrayDefStmt)
+
+
+狀態 233
+
+   26 Stmt: IF '(' Expr ')' $@5 IfElseStmt $@6 • Elsestmt
+
+    ELSE  偏移，並進入狀態 240
+
+    ELSE      [使用規則 38 以縮減 (Elsestmt)]
+    $default  使用規則 38 以縮減 (Elsestmt)
+
+    Elsestmt  進入狀態 241
+
+
+狀態 234
+
+   50 IfElseStmt: $@14 '{' • StmtList '}'
+
+    COUT        偏移，並進入狀態 161
+    BNT         偏移，並進入狀態 13
+    ADD         偏移，並進入狀態 14
+    SUB         偏移，並進入狀態 15
+    NOT         偏移，並進入狀態 16
+    IF          偏移，並進入狀態 162
+    FOR         偏移，並進入狀態 163
+    WHILE       偏移，並進入狀態 164
+    RETURN      偏移，並進入狀態 165
+    BREAK       偏移，並進入狀態 166
+    CONTINUE    偏移，並進入狀態 167
+    VARIABLE_T  偏移，並進入狀態 168
+    BOOL_LIT    偏移，並進入狀態 17
+    CHAR_LIT    偏移，並進入狀態 18
+    INT_LIT     偏移，並進入狀態 19
+    FLOAT_LIT   偏移，並進入狀態 20
+    STR_LIT     偏移，並進入狀態 21
+    IDENT       偏移，並進入狀態 45
+    ';'         偏移，並進入狀態 169
+    '('         偏移，並進入狀態 46
+
+    StmtList           進入狀態 242
+    Stmt               進入狀態 171
+    RegularDefineStmt  進入狀態 172
+    Expr               進入狀態 173
+    ExprLeftSide       進入狀態 48
+    ExprRightSide      進入狀態 49
+    ExprDoubleAnd      進入狀態 25
+    ExprOr             進入狀態 26
+    ExprXor            進入狀態 27
+    ExprAnd            進入狀態 28
+    ExprSame           進入狀態 29
+    ExprBigOrSmall     進入狀態 30
+    ExprBitwise        進入狀態 31
+    ExprPlus           進入狀態 32
+    ExprCross          進入狀態 33
+    ExprFrontUnary     進入狀態 34
+    ExprPostfix        進入狀態 35
+    ExprValue          進入狀態 36
+
+
+狀態 235
+
+   19 StmtList: StmtList • Stmt
+   32 Stmt: FOR $@10 '(' ForStmt ')' '{' StmtList • '}'
+
+    COUT        偏移，並進入狀態 161
+    BNT         偏移，並進入狀態 13
+    ADD         偏移，並進入狀態 14
+    SUB         偏移，並進入狀態 15
+    NOT         偏移，並進入狀態 16
+    IF          偏移，並進入狀態 162
+    FOR         偏移，並進入狀態 163
+    WHILE       偏移，並進入狀態 164
+    RETURN      偏移，並進入狀態 165
+    BREAK       偏移，並進入狀態 166
+    CONTINUE    偏移，並進入狀態 167
+    VARIABLE_T  偏移，並進入狀態 168
+    BOOL_LIT    偏移，並進入狀態 17
+    CHAR_LIT    偏移，並進入狀態 18
+    INT_LIT     偏移，並進入狀態 19
+    FLOAT_LIT   偏移，並進入狀態 20
+    STR_LIT     偏移，並進入狀態 21
+    IDENT       偏移，並進入狀態 45
+    ';'         偏移，並進入狀態 169
+    '('         偏移，並進入狀態 46
+    '}'         偏移，並進入狀態 243
+
+    Stmt               進入狀態 187
+    RegularDefineStmt  進入狀態 172
+    Expr               進入狀態 173
+    ExprLeftSide       進入狀態 48
+    ExprRightSide      進入狀態 49
+    ExprDoubleAnd      進入狀態 25
+    ExprOr             進入狀態 26
+    ExprXor            進入狀態 27
+    ExprAnd            進入狀態 28
+    ExprSame           進入狀態 29
+    ExprBigOrSmall     進入狀態 30
+    ExprBitwise        進入狀態 31
+    ExprPlus           進入狀態 32
+    ExprCross          進入狀態 33
+    ExprFrontUnary     進入狀態 34
+    ExprPostfix        進入狀態 35
+    ExprValue          進入狀態 36
+
+
+狀態 236
+
+   53 ForStmt: ForInit $@15 ';' Expr • ';' $@16 Expr
+
+    ';'  偏移，並進入狀態 244
+
+
+狀態 237
+
+   30 Stmt: WHILE $@7 '(' Expr $@8 ')' $@9 • '{' StmtList '}'
+
+    '{'  偏移，並進入狀態 245
+
+
+狀態 238
+
+   64 ArrayExpression: '{' ArrayInsideExpression • '}'
+   66 ArrayInsideExpression: ArrayInsideExpression • ',' $@18 ExprPlus
+
+    '}'  偏移，並進入狀態 246
+    ','  偏移，並進入狀態 247
+
+
+狀態 239
+
+   68 ArrayInsideExpression: $@19 • ExprPlus
+
+    BNT        偏移，並進入狀態 13
+    ADD        偏移，並進入狀態 14
+    SUB        偏移，並進入狀態 15
+    NOT        偏移，並進入狀態 16
+    BOOL_LIT   偏移，並進入狀態 17
+    CHAR_LIT   偏移，並進入狀態 18
+    INT_LIT    偏移，並進入狀態 19
+    FLOAT_LIT  偏移，並進入狀態 20
+    STR_LIT    偏移，並進入狀態 21
+    IDENT      偏移，並進入狀態 22
+    '('        偏移，並進入狀態 23
+
+    ExprPlus        進入狀態 248
+    ExprCross       進入狀態 33
+    ExprFrontUnary  進入狀態 34
+    ExprPostfix     進入狀態 35
+    ExprValue       進入狀態 36
+
+
+狀態 240
+
+   37 Elsestmt: ELSE • IfElseStmt
+
+    COUT        偏移，並進入狀態 161
+    BNT         偏移，並進入狀態 13
+    ADD         偏移，並進入狀態 14
+    SUB         偏移，並進入狀態 15
+    NOT         偏移，並進入狀態 16
+    IF          偏移，並進入狀態 162
+    FOR         偏移，並進入狀態 163
+    WHILE       偏移，並進入狀態 164
+    RETURN      偏移，並進入狀態 165
+    BREAK       偏移，並進入狀態 166
+    CONTINUE    偏移，並進入狀態 167
+    VARIABLE_T  偏移，並進入狀態 168
+    BOOL_LIT    偏移，並進入狀態 17
+    CHAR_LIT    偏移，並進入狀態 18
+    INT_LIT     偏移，並進入狀態 19
+    FLOAT_LIT   偏移，並進入狀態 20
+    STR_LIT     偏移，並進入狀態 21
+    IDENT       偏移，並進入狀態 45
+    ';'         偏移，並進入狀態 169
+    '('         偏移，並進入狀態 46
+
+    $default  使用規則 49 以縮減 ($@14)
+
+    Stmt               進入狀態 223
+    RegularDefineStmt  進入狀態 172
+    IfElseStmt         進入狀態 249
+    $@14               進入狀態 225
+    Expr               進入狀態 173
+    ExprLeftSide       進入狀態 48
+    ExprRightSide      進入狀態 49
+    ExprDoubleAnd      進入狀態 25
+    ExprOr             進入狀態 26
+    ExprXor            進入狀態 27
+    ExprAnd            進入狀態 28
+    ExprSame           進入狀態 29
+    ExprBigOrSmall     進入狀態 30
+    ExprBitwise        進入狀態 31
+    ExprPlus           進入狀態 32
+    ExprCross          進入狀態 33
+    ExprFrontUnary     進入狀態 34
+    ExprPostfix        進入狀態 35
+    ExprValue          進入狀態 36
+
+
+狀態 241
+
+   26 Stmt: IF '(' Expr ')' $@5 IfElseStmt $@6 Elsestmt •
+
+    $default  使用規則 26 以縮減 (Stmt)
+
+
+狀態 242
+
+   19 StmtList: StmtList • Stmt
+   50 IfElseStmt: $@14 '{' StmtList • '}'
+
+    COUT        偏移，並進入狀態 161
+    BNT         偏移，並進入狀態 13
+    ADD         偏移，並進入狀態 14
+    SUB         偏移，並進入狀態 15
+    NOT         偏移，並進入狀態 16
+    IF          偏移，並進入狀態 162
+    FOR         偏移，並進入狀態 163
+    WHILE       偏移，並進入狀態 164
+    RETURN      偏移，並進入狀態 165
+    BREAK       偏移，並進入狀態 166
+    CONTINUE    偏移，並進入狀態 167
+    VARIABLE_T  偏移，並進入狀態 168
+    BOOL_LIT    偏移，並進入狀態 17
+    CHAR_LIT    偏移，並進入狀態 18
+    INT_LIT     偏移，並進入狀態 19
+    FLOAT_LIT   偏移，並進入狀態 20
+    STR_LIT     偏移，並進入狀態 21
+    IDENT       偏移，並進入狀態 45
+    ';'         偏移，並進入狀態 169
+    '('         偏移，並進入狀態 46
+    '}'         偏移，並進入狀態 250
+
+    Stmt               進入狀態 187
+    RegularDefineStmt  進入狀態 172
+    Expr               進入狀態 173
+    ExprLeftSide       進入狀態 48
+    ExprRightSide      進入狀態 49
+    ExprDoubleAnd      進入狀態 25
+    ExprOr             進入狀態 26
+    ExprXor            進入狀態 27
+    ExprAnd            進入狀態 28
+    ExprSame           進入狀態 29
+    ExprBigOrSmall     進入狀態 30
+    ExprBitwise        進入狀態 31
+    ExprPlus           進入狀態 32
+    ExprCross          進入狀態 33
+    ExprFrontUnary     進入狀態 34
+    ExprPostfix        進入狀態 35
+    ExprValue          進入狀態 36
+
+
+狀態 243
+
+   32 Stmt: FOR $@10 '(' ForStmt ')' '{' StmtList '}' •
+
+    $default  使用規則 32 以縮減 (Stmt)
+
+
+狀態 244
+
+   53 ForStmt: ForInit $@15 ';' Expr ';' • $@16 Expr
+
+    $default  使用規則 52 以縮減 ($@16)
+
+    $@16  進入狀態 251
+
+
+狀態 245
+
+   30 Stmt: WHILE $@7 '(' Expr $@8 ')' $@9 '{' • StmtList '}'
+
+    COUT        偏移，並進入狀態 161
+    BNT         偏移，並進入狀態 13
+    ADD         偏移，並進入狀態 14
+    SUB         偏移，並進入狀態 15
+    NOT         偏移，並進入狀態 16
+    IF          偏移，並進入狀態 162
+    FOR         偏移，並進入狀態 163
+    WHILE       偏移，並進入狀態 164
+    RETURN      偏移，並進入狀態 165
+    BREAK       偏移，並進入狀態 166
+    CONTINUE    偏移，並進入狀態 167
+    VARIABLE_T  偏移，並進入狀態 168
+    BOOL_LIT    偏移，並進入狀態 17
+    CHAR_LIT    偏移，並進入狀態 18
+    INT_LIT     偏移，並進入狀態 19
+    FLOAT_LIT   偏移，並進入狀態 20
+    STR_LIT     偏移，並進入狀態 21
+    IDENT       偏移，並進入狀態 45
+    ';'         偏移，並進入狀態 169
+    '('         偏移，並進入狀態 46
+
+    StmtList           進入狀態 252
+    Stmt               進入狀態 171
+    RegularDefineStmt  進入狀態 172
+    Expr               進入狀態 173
+    ExprLeftSide       進入狀態 48
+    ExprRightSide      進入狀態 49
+    ExprDoubleAnd      進入狀態 25
+    ExprOr             進入狀態 26
+    ExprXor            進入狀態 27
+    ExprAnd            進入狀態 28
+    ExprSame           進入狀態 29
+    ExprBigOrSmall     進入狀態 30
+    ExprBitwise        進入狀態 31
+    ExprPlus           進入狀態 32
+    ExprCross          進入狀態 33
+    ExprFrontUnary     進入狀態 34
+    ExprPostfix        進入狀態 35
+    ExprValue          進入狀態 36
+
+
+狀態 246
+
+   64 ArrayExpression: '{' ArrayInsideExpression '}' •
+
+    $default  使用規則 64 以縮減 (ArrayExpression)
+
+
+狀態 247
+
+   66 ArrayInsideExpression: ArrayInsideExpression ',' • $@18 ExprPlus
+
+    $default  使用規則 65 以縮減 ($@18)
+
+    $@18  進入狀態 253
+
+
+狀態 248
+
+   68 ArrayInsideExpression: $@19 ExprPlus •
+  128 ExprPlus: ExprPlus • ADD ExprCross
+  129         | ExprPlus • SUB ExprCross
+
+    ADD  偏移，並進入狀態 64
+    SUB  偏移，並進入狀態 65
+
+    $default  使用規則 68 以縮減 (ArrayInsideExpression)
+
+
+狀態 249
+
+   37 Elsestmt: ELSE IfElseStmt •
+
+    $default  使用規則 37 以縮減 (Elsestmt)
+
+
+狀態 250
+
+   50 IfElseStmt: $@14 '{' StmtList '}' •
+
+    $default  使用規則 50 以縮減 (IfElseStmt)
+
+
+狀態 251
+
+   53 ForStmt: ForInit $@15 ';' Expr ';' $@16 • Expr
+
+    BNT        偏移，並進入狀態 13
+    ADD        偏移，並進入狀態 14
+    SUB        偏移，並進入狀態 15
+    NOT        偏移，並進入狀態 16
+    BOOL_LIT   偏移，並進入狀態 17
+    CHAR_LIT   偏移，並進入狀態 18
+    INT_LIT    偏移，並進入狀態 19
+    FLOAT_LIT  偏移，並進入狀態 20
+    STR_LIT    偏移，並進入狀態 21
+    IDENT      偏移，並進入狀態 45
+    '('        偏移，並進入狀態 46
+
+    Expr            進入狀態 254
+    ExprLeftSide    進入狀態 48
+    ExprRightSide   進入狀態 49
+    ExprDoubleAnd   進入狀態 25
+    ExprOr          進入狀態 26
+    ExprXor         進入狀態 27
+    ExprAnd         進入狀態 28
+    ExprSame        進入狀態 29
+    ExprBigOrSmall  進入狀態 30
+    ExprBitwise     進入狀態 31
+    ExprPlus        進入狀態 32
+    ExprCross       進入狀態 33
+    ExprFrontUnary  進入狀態 34
+    ExprPostfix     進入狀態 35
+    ExprValue       進入狀態 36
+
+
+狀態 252
+
+   19 StmtList: StmtList • Stmt
+   30 Stmt: WHILE $@7 '(' Expr $@8 ')' $@9 '{' StmtList • '}'
+
+    COUT        偏移，並進入狀態 161
+    BNT         偏移，並進入狀態 13
+    ADD         偏移，並進入狀態 14
+    SUB         偏移，並進入狀態 15
+    NOT         偏移，並進入狀態 16
+    IF          偏移，並進入狀態 162
+    FOR         偏移，並進入狀態 163
+    WHILE       偏移，並進入狀態 164
+    RETURN      偏移，並進入狀態 165
+    BREAK       偏移，並進入狀態 166
+    CONTINUE    偏移，並進入狀態 167
+    VARIABLE_T  偏移，並進入狀態 168
+    BOOL_LIT    偏移，並進入狀態 17
+    CHAR_LIT    偏移，並進入狀態 18
+    INT_LIT     偏移，並進入狀態 19
+    FLOAT_LIT   偏移，並進入狀態 20
+    STR_LIT     偏移，並進入狀態 21
+    IDENT       偏移，並進入狀態 45
+    ';'         偏移，並進入狀態 169
+    '('         偏移，並進入狀態 46
+    '}'         偏移，並進入狀態 255
+
+    Stmt               進入狀態 187
+    RegularDefineStmt  進入狀態 172
+    Expr               進入狀態 173
+    ExprLeftSide       進入狀態 48
+    ExprRightSide      進入狀態 49
+    ExprDoubleAnd      進入狀態 25
+    ExprOr             進入狀態 26
+    ExprXor            進入狀態 27
+    ExprAnd            進入狀態 28
+    ExprSame           進入狀態 29
+    ExprBigOrSmall     進入狀態 30
+    ExprBitwise        進入狀態 31
+    ExprPlus           進入狀態 32
+    ExprCross          進入狀態 33
+    ExprFrontUnary     進入狀態 34
+    ExprPostfix        進入狀態 35
+    ExprValue          進入狀態 36
+
+
+狀態 253
+
+   66 ArrayInsideExpression: ArrayInsideExpression ',' $@18 • ExprPlus
+
+    BNT        偏移，並進入狀態 13
+    ADD        偏移，並進入狀態 14
+    SUB        偏移，並進入狀態 15
+    NOT        偏移，並進入狀態 16
+    BOOL_LIT   偏移，並進入狀態 17
+    CHAR_LIT   偏移，並進入狀態 18
+    INT_LIT    偏移，並進入狀態 19
+    FLOAT_LIT  偏移，並進入狀態 20
+    STR_LIT    偏移，並進入狀態 21
+    IDENT      偏移，並進入狀態 22
+    '('        偏移，並進入狀態 23
+
+    ExprPlus        進入狀態 256
+    ExprCross       進入狀態 33
+    ExprFrontUnary  進入狀態 34
+    ExprPostfix     進入狀態 35
+    ExprValue       進入狀態 36
+
+
+狀態 254
+
+   53 ForStmt: ForInit $@15 ';' Expr ';' $@16 Expr •
+
+    $default  使用規則 53 以縮減 (ForStmt)
+
+
+狀態 255
+
+   30 Stmt: WHILE $@7 '(' Expr $@8 ')' $@9 '{' StmtList '}' •
+
+    $default  使用規則 30 以縮減 (Stmt)
+
+
+狀態 256
+
+   66 ArrayInsideExpression: ArrayInsideExpression ',' $@18 ExprPlus •
+  128 ExprPlus: ExprPlus • ADD ExprCross
+  129         | ExprPlus • SUB ExprCross
+
+    ADD  偏移，並進入狀態 64
+    SUB  偏移，並進入狀態 65
+
+    $default  使用規則 66 以縮減 (ArrayInsideExpression)
